@@ -1,3 +1,21 @@
+.s-principal{
+
+width: 100%;
+border: solid;
+height: 80dvh;
+display:flex ;
+flex-direction: column;
+
+}
+
+/*CENTRAR DIVS*/
+.centrado{
+
+    display: flex;
+    justify-content: center;
+ 
+}
+/*CARLOS ENTIENDE*/
 .display-vertical-between {
     display: flex;
     flex-direction: column;
@@ -77,7 +95,7 @@
 }
 
 nav {
-    position: fixed;
     top: 0;
     filter: blur(1);
+    height: 100px;
 }
