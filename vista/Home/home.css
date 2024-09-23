@@ -3,46 +3,23 @@ body {
     
 }
 
-.display-vertical-between {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
+/*NAV*/
+nav {
+    position: fixed;
+    top: 0;
+    filter: blur(1);
 }
 
-.display-vertical-around {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
+
+/*MENU*/
+menu {
+    margin: 0;
+    padding: 0;
+    gap: 20px;
 }
 
-.display-vertical-center {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-}
 
-#titulo-app {
-    font-family: "Permanent Marker", cursive;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 2.0rem;
-}
-
-.alineado-vertical {
-    align-items: center;
-}
-
-.texto-fuente-playwrite {
-    font-family: "Playwrite DE Grund", cursive;
-    font-optical-sizing: auto;
-    font-weight: normal;
-    font-style: normal;
-}
-
+/*Tarjetas*/
 .tarjeta-item {
 
     height: 150px;
@@ -75,10 +52,7 @@ body {
 }
 
 
-.letra-bold {
-    font-weight:bold;
-}
-
+/*LOGOUT*/
 #logout {
     gap: 5px;
 }
@@ -119,6 +93,8 @@ body {
     transition: background-color 0.3s ease-in-out;
 }
 
+
+/*FOOTER*/
 footer {
     background-color: black;
     color: white;
@@ -129,6 +105,8 @@ footer {
     bottom: 0;
 }
 
+
+/*INFO USUARIO*/
 #foto-perfil {
     height: 140px;
     width: 140px;
@@ -137,25 +115,69 @@ footer {
     border: solid 3px rgb(84, 80, 209);
 }
 
-nav {
-    position: fixed;
-    top: 0;
-    filter: blur(1);
-}
-
 .nombre {
     font-size: 1.7rem;
 }
 
-menu {
-    margin: 0;
-    padding: 0;
-    gap: 20px;
-}
-
-#info-Admin {
+#info-usuario {
     gap: 0px;
 }
+
+
+/*AJUSTES GENERALES: Around, Center, Between*/
+
+.display-vertical-between {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.display-vertical-around {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.display-vertical-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.alineado-vertical {
+    align-items: center;
+}
+
+
+/*FUENTES DE LETRA*/
+
+#titulo-app {
+    font-family: "Permanent Marker", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 2.0rem;
+}
+
+.texto-fuente-playwrite {
+    font-family: "Playwrite DE Grund", cursive;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+}
+
+.letra-bold {
+    font-weight:bold;
+}
+
+
+
+
+
+
 
 @media only screen and (max-width: 500px) {
 
