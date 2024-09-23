@@ -13,7 +13,7 @@
     <nav class="d-flex justify-content-between w-100 p-3 ">
         <p id="titulo-app">Rekord</p>
         <div id="logout" class="display-vertical-around alineado-vertical">
-            <a href=""><img src="/recursos/Images/logout_2.png" alt="" id="icono-logout"></a>
+            <a id="link-logout" href=""><img src="/recursos/Images/logout_2.png" alt="" id="icono-logout"></a>
             <p class="texto-fuente-playwrite">LogOut</p>
         </div>
     </nav>
@@ -21,9 +21,9 @@
     
     <main class="h-100 display-vertical-center">
         <div id="info-usuario" class="display-vertical-center">
-            <img id="foto-perfil" src="/recursos/Images/perfil.jpeg" alt="">
-            <p class="texto-fuente-playwrite nombre">Carlos Jhoan Aguilar</p>
-            <p class="texto-fuente-playwrite">Project Manager</p>
+            <img id="foto-perfil" src="" alt="">
+            <p id="nombre" class="texto-fuente-playwrite nombre"></p>
+            <p id="rol" class="texto-fuente-playwrite"></p>
         </div>
         <menu class="d-flex flex-wrap justify-content-center">
             <div id="bot-proyectos" class="display-vertical-around tarjeta-item">
@@ -35,10 +35,10 @@
                 <p class="texto-fuente-playwrite letra-bold">Mi Team</p>
             </div>
             <div id="bot-actividades" class="dev display-vertical-around tarjeta-item">
-                <img src="./recursos/Images/task.png" alt="" id="icono-estadisticas">
+                <img src="/recursos/Images/task.png" alt="" id="icono-estadisticas">
                 <p class="texto-fuente-playwrite letra-bold">Mis actividades</p>
             </div>
-            <div id="bot-estadisticas" class="display-vertical-around tarjeta-item">
+            <div id="bot-estadisticas" class="project-lider display-vertical-around tarjeta-item">
                 <img src="/recursos/Images/stats_5.png" alt="" id="icono-estadisticas">
                 <p class="texto-fuente-playwrite letra-bold">Estadísticas</p>
             </div>
