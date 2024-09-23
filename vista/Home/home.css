@@ -10,6 +10,10 @@ nav {
     filter: blur(1);
 }
 
+.divFiltrado{
+    width: 80%;
+    margin: 0 auto;
+    }
 
 /*MENU*/
 menu {
