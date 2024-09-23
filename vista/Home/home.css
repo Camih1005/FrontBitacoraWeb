@@ -18,7 +18,6 @@ menu {
     gap: 20px;
 }
 
-
 /*Tarjetas*/
 .tarjeta-item {
 
@@ -172,11 +171,6 @@ footer {
 .letra-bold {
     font-weight:bold;
 }
-
-
-
-
-
 
 
 @media only screen and (max-width: 500px) {
