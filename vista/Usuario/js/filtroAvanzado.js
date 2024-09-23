@@ -1,8 +1,7 @@
 function initializeFilterSystem() {
-    // Insertar HTML
     document.body.insertAdjacentHTML('beforeend', `
         <div class="filtroContainer">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top"> <!-- Cambiada la clase a 'sticky-top' -->
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">Actividades</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,15 +27,36 @@ function initializeFilterSystem() {
                     </ul>
                     <form class="d-flex">
                         <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" id="searchInput">
-                        <button class="btn btn-outline-success" type="submit" id="searchButton">Buscar</button>
                     </form>
                 </div>
             </div>
         </nav>
 
-        <div class="container mt-4">
+        <div class="container mt-4"> <!-- Eliminado el margen superior, ya no es necesario -->
             <div id="filtered-items" class="row">
                 <!-- Los elementos filtrados se mostrarán aquí -->
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="activityModal" tabindex="-1" aria-labelledby="activityModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="activityModalLabel">Detalles de la Actividad</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h5 id="modalActivityName"></h5>
+                        <p id="modalActivityDescription"></p>
+                        <p><small class="text-muted" id="modalActivityDate"></small></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" id="deleteActivityButton">Eliminar Actividad</button>
+                        <button type="button" class="btn btn-success" id="completedActivityButton">Actividad Hecha</button>
+                        <button type="button" class="btn btn-warning" id="pausedActivityButton">Actividad Pausada</button>
+                    </div>
+                </div>
             </div>
         </div>
         </div>
@@ -51,6 +71,7 @@ function initializeFilterSystem() {
         }
         .card {
             transition: transform 0.3s ease-in-out;
+            cursor: pointer; /* Cambia el cursor al pasar sobre las tarjetas */
         }
         .card:hover {
             transform: scale(1.05);
@@ -89,16 +110,15 @@ function initializeFilterSystem() {
         const navLinks = document.querySelectorAll('.nav-link');
         const filteredItems = document.getElementById('filtered-items');
         const searchInput = document.getElementById('searchInput');
-        const searchButton = document.getElementById('searchButton');
 
-        if (navLinks.length && filteredItems && searchInput && searchButton) {
+        if (navLinks.length && filteredItems && searchInput) {
             clearInterval(checkElementsAndInitialize);
-            initializeFilter(navLinks, filteredItems, searchInput, searchButton);
+            initializeFilter(navLinks, filteredItems, searchInput);
         }
     }, 100);
 }
 
-function initializeFilter(navLinks, filteredItems, searchInput, searchButton) {
+function initializeFilter(navLinks, filteredItems, searchInput) {
     // Datos de ejemplo
     const items = [
         { id: 1, name: 'Actividad A', date: '2023-05-15', description: 'Descripción de la Actividad A', creationDate: '2023-01-10' },
@@ -142,52 +162,60 @@ function initializeFilter(navLinks, filteredItems, searchInput, searchButton) {
             const highlightedDescription = highlightText(item.description, searchTerm);
 
             filteredContent += `
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">${highlightedName}</h5>
-                            <p class="card-text">${highlightedDescription}</p>
-                            <p class="card-text"><small class="text-muted">Fecha: ${item.date}</small></p>
-                        </div>
-                    </div>
-                </div>
-            `;
+    <div class="col-12 mb-3">  <!-- Cambiado de col-md-4 a col-12 -->
+        <div class="card" data-id="${item.id}">
+            <div class="card-body">
+                <h5 class="card-title">${highlightedName}</h5>
+                <p class="card-text">${highlightedDescription}</p>
+                <p class="card-text"><small class="text-muted">Fecha: ${item.date}</small></p>
+            </div>
+        </div>
+    </div>
+`;
+
         });
 
         filteredItems.innerHTML = filteredContent || '<p class="col-12">No se encontraron resultados.</p>';
+
+        // Agregar el evento de clic para abrir el modal en las tarjetas
+        const cards = filteredItems.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('click', () => {
+                const itemId = card.getAttribute('data-id');
+                const item = items.find(i => i.id == itemId);
+
+                // Llenar el modal con la información de la actividad
+                document.getElementById('modalActivityName').innerText = item.name;
+                document.getElementById('modalActivityDescription').innerText = item.description;
+                document.getElementById('modalActivityDate').innerText = item.date;
+
+                // Mostrar el modal
+                const activityModal = new bootstrap.Modal(document.getElementById('activityModal'));
+                activityModal.show();
+            });
+        });
     }
 
-    // Filtrar al cambiar entre opciones del menú
+    // Inicializar el filtro por defecto
+    filterItems('all');
+
+    // Manejo de clics en los enlaces de la barra de navegación
     navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', (e) => {
             e.preventDefault();
-            navLinks.forEach(l => l.classList.remove('active'));
-            this.classList.add('active');
-            const filter = this.getAttribute('data-filter');
+            const filter = link.getAttribute('data-filter');
+            navLinks.forEach(nav => nav.classList.remove('active'));
+            link.classList.add('active');
             filterItems(filter, searchInput.value);
         });
     });
 
-    // Filtrar al hacer clic en el botón de búsqueda
-    searchButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        const activeFilter = document.querySelector('.nav-link.active').getAttribute('data-filter');
-        filterItems(activeFilter, searchInput.value);
+    // Manejo de búsqueda en tiempo real
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.trim();
+        filterItems('all', searchTerm);
     });
-
-    // Búsqueda en tiempo real
-    searchInput.addEventListener('input', function() {
-        const activeFilter = document.querySelector('.nav-link.active').getAttribute('data-filter');
-        filterItems(activeFilter, this.value);
-    });
-
-    // Inicializar con todos los items
-    filterItems('all');
 }
 
-// Iniciar el sistema de filtro cuando el DOM esté listo
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initializeFilterSystem);
-} else {
-    initializeFilterSystem();
-}
+// Iniciar el sistema de filtrado al cargar la página
+document.addEventListener('DOMContentLoaded', initializeFilterSystem);
