@@ -1,0 +1,83 @@
+.display-vertical-between {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#titulo-app {
+    font-family: "Permanent Marker", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 2.0rem;
+}
+
+
+.alineado-vertical {
+    align-items: center;
+}
+
+.texto-fuente-playwrite {
+    font-family: "Playwrite DE Grund", cursive;
+    font-optical-sizing: auto;
+    font-weight: normal;
+    font-style: normal;
+}
+
+.display-vertical-around {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+
+.letra-bold {
+    font-weight:bold;
+}
+
+#logout {
+    gap: 5px;
+}
+
+#logout p {
+    /* visibility: collapse; */
+    background-color: black;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s ease-out allow-discrete;
+    
+}
+
+#logout:hover p {
+    
+    opacity: 1;
+    transition: opacity 0.3s ease-out allow-discrete;
+}
+
+#logout img {
+    
+    border-radius: 20%;   
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+#logout:hover img {
+
+    box-shadow: 0px 0px 17px -5px rgba(172, 170, 170);
+    background-color: rgb(241, 238, 238);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+#logout:active img {
+
+    background-color: rgb(227, 223, 223);
+    transition: background-color 0.3s ease-in-out;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    filter: blur(1);
+}
