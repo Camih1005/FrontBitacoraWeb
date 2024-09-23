@@ -1,24 +1,17 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playwrite+DE+Grund:wght@100..400&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Playwrite+DE+Grund:wght@100..400&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./HomeCSS/home.css">
-    <title>Project-Manager</title>
-  <!-- los estilos los puse en /usuario/homeUser.cs -->
+    <link rel="stylesheet" href="../HomeCSS/home.css">
+    <title>Home</title>
 </head>
 <body class="display-vertical-between">
     <nav class="d-flex justify-content-between w-100 p-3 ">
         <p id="titulo-app">Rekord</p>
         <div id="logout" class="display-vertical-around alineado-vertical">
-            <a href=""><img src="../Images/logout_2.png" alt="" id="icono-logout"></a>
+            <a href=""><img src="/Images/logout_2.png" id="icono-logout"></a>
             <p class="texto-fuente-playwrite">LogOut</p>
         </div>
     </nav>
@@ -26,23 +19,20 @@
     
     <main class="h-100 display-vertical-center">
         <div id="info-Admin" class="display-vertical-center">
-            <img id="foto-perfil" src="../Images/perfil.jpeg" alt="">
+            <img id="foto-perfil" src="/Images/perfil.jpeg" alt="">
             <p class="texto-fuente-playwrite nombre">Carlos Jhoan Aguilar</p>
             <p class="texto-fuente-playwrite">Project Manager</p>
         </div>
         <menu class="d-flex flex-wrap justify-content-center">
             <div id="bot-proyectos" class="display-vertical-around tarjeta-item">
-                <img src="../Images/project_2.png" alt="" id="icono-proyectos">
+                <img src="/Images/project_2.png" alt="" id="icono-proyectos">
                 <p class="texto-fuente-playwrite letra-bold">Proyectos</p>
             </div>
             <div id="bot-mi-team" class="display-vertical-around tarjeta-item">
-                <img src="../Images/team.png" alt="" id="icono-mi-team" >
+                <img src="/Images/team.png" alt="" id="icono-mi-team" >
                 <p class="texto-fuente-playwrite letra-bold">Mi Team</p>
             </div>
-            <div id="bot-estadisticas" class="display-vertical-around tarjeta-item">
-                <img src="../Images/stats_5.png" alt="" id="icono-estadisticas">
-                <p class="texto-fuente-playwrite letra-bold">Estadísticas</p>
-            </div>
+           
         </menu>
     </main>
     <footer class="texto-fuente-playwrite letra-bold"><em>By </em>Kks-Tech</footer>
