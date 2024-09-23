@@ -18,6 +18,7 @@ menu {
     gap: 20px;
 }
 
+
 /*Tarjetas*/
 .tarjeta-item {
 
@@ -49,6 +50,7 @@ menu {
     transition: background-color 0.3s ease-in-out;
 
 }
+
 
 /*LOGOUT*/
 #logout {
@@ -91,6 +93,7 @@ menu {
     transition: background-color 0.3s ease-in-out;
 }
 
+
 /*FOOTER*/
 footer {
     background-color: black;
@@ -100,6 +103,24 @@ footer {
     text-align: center;
     position: fixed;
     bottom: 0;
+}
+
+
+/*INFO USUARIO*/
+#foto-perfil {
+    height: 140px;
+    width: 140px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+    border: solid 3px rgb(84, 80, 209);
+}
+
+.nombre {
+    font-size: 1.7rem;
+}
+
+#info-usuario {
+    gap: 0px;
 }
 
 
@@ -131,6 +152,7 @@ footer {
     align-items: center;
 }
 
+
 /*FUENTES DE LETRA*/
 
 #titulo-app {
@@ -140,17 +162,12 @@ footer {
     font-size: 2.0rem;
 }
 
-
-
 .texto-fuente-playwrite {
     font-family: "Playwrite DE Grund", cursive;
     font-optical-sizing: auto;
     font-weight: normal;
     font-style: normal;
 }
-
-
-
 
 .letra-bold {
     font-weight:bold;
@@ -160,25 +177,7 @@ footer {
 
 
 
-#foto-perfil {
-    height: 140px;
-    width: 140px;
-    border-radius: 50%;
-    margin-bottom: 5px;
-    border: solid 3px rgb(84, 80, 209);
-}
 
-
-
-.nombre {
-    font-size: 1.7rem;
-}
-
-
-
-#info-usuario {
-    gap: 0px;
-}
 
 @media only screen and (max-width: 500px) {
 
