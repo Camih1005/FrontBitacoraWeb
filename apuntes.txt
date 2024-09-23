@@ -1,0 +1,76 @@
+- Vistas a desarrollar
+
+1. Login --> Token  --> Identificar Rol -> Muestra vista / rol (Está Listo)
+
+-- Vistas de los usuario / rol
+
+** Vista del admin
+1. Crear proyectos 
+2. Asignar líder al proyecto
+3. regsitrar usuarios
+4. Actualizar info del proyecto
+5. eliminar proyecto
+6. estadísiticas
+
+** Vista del líder  --> 
+1. Crear actividades
+2. asignar personas a proyectos
+3. asignar personas a actividades
+4. actualizar actividades
+5. eliminar
+6. ver 
+7. estadísticas del tech-líder
+8. registra sus asistencia
+9. Asignarse actividades
+
+** Vista usuario
+1. Registrar asistencia 
+descripción: - Posibilidad de marcar asitencia cuando entre al sistema
+		- Fin de jornada cuando presione LOgout con doble filtro, parea estar seguro
+2. Logout  sin registrar asistencia, lo hace sin problema
+3. revisar los poryectos en los que él esté vinculado
+- Toda la infodel proyecto
+- Actividades:
+- Si hay un actividdad asignada, debe mostrar quién la está realizando
+ - si hay actividades que estén asignadas, él NO las puede tomar 
+- SOLO puede asignarse a si mismo, actividades que estén PENDIENTES
+
+
+--------** 2 secciones **---------------------
+ // Proyectos
+	
+ // Info Devs:
+- proyectos en los que él está
+- Actividades asignadas
+- Tareas culminadas
+- tareas pendientes
+
+:: PLUS ::
+1. Filtrar por año, día y mes
+
+
+** Vista del dev
+1. Visualizar proyectos en lso que está participando
+2. Asignarse actividades a sí mismo
+3. Resgitrar el tiempo que dedica por cada actividad
+4. Resgistrar asistencia
+
+
+-- Fuente de letra para las tarjetas
+
+.playwrite-de-grund-<uniquifier> {
+  font-family: "Playwrite DE Grund", cursive;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+}
+
+-- Fuente para el título
+
+.permanent-marker-regular {
+  font-family: "Permanent Marker", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+-- Posible Bombre para la bitácora reckordum - rekord- libello
