@@ -1,6 +1,4 @@
 
-
-
 document.body.setAttribute("onload", "cargarProyectos()")
 
 function cargarProyectos() {
