@@ -20,7 +20,7 @@ document.getElementById("bot-estadisticas").setAttribute("onclick", "irAEstadist
 
 function mostrarHome() {
 
-    localStorage.setItem("rol", "Desarrollador");
+    localStorage.setItem("rol", "project manager");
 
     // Cargar la foto del usuario
     let imgPerfilUsuario = document.getElementById("foto-perfil");
@@ -69,18 +69,3 @@ function mostrarHome() {
 
 }
 
-// function irAProyectos() {
-
-//     location.href = "/vista/Proyectos/proyectos.html"
-// }
-
-
-// function irAUsuarios() {
-
-//     location.href = "/vista/Team/team.html"
-// }
-
-// function irAEstadisticas() {
-
-//     location.href = "/vista/Estadisticas/estadisticas.html"
-// }
