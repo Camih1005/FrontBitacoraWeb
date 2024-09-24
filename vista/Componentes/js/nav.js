@@ -1,4 +1,4 @@
-fetch('/vista/nav.html')
+fetch('/vista/Componentes/html/nav.html')
 .then(response => response.text())
 .then(data =>  {
         document.body.innerHTML += data

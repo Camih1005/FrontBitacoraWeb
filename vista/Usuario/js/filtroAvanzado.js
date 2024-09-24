@@ -1,10 +1,9 @@
-// import {getCategories} from "/controlador/roles"
 
-// let isd = await getCategories(rolId)
-
-// rolId = 3
-
-// console.log(isd)
+let usuario = {
+    "nombre" : "Carlos Jhoan Aguilar",
+    "rol" : "Desarrollador",
+    "foto" : ""
+}
 
 function initializeFilterSystem() {
     document.body.insertAdjacentHTML('beforeend', `

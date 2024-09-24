@@ -1,9 +1,14 @@
 
+let rol="";
+
 let usuario = {
     "nombre" : "Carlos Jhoan Aguilar",
-    "rol" : "Project Manager",
-    "foto" : " "
+    "rol" : `${localStorage.getItem("rol")}`,
+    "foto" : "perfil.jpeg"
 }
+
+
+let divDev ;
 
 
 document.body.setAttribute("onload", "mostrarHome()");
@@ -14,6 +19,8 @@ document.getElementById("bot-actividades").setAttribute("onclick", "irAActividad
 document.getElementById("bot-estadisticas").setAttribute("onclick", "irAEstadisticas()");
 
 function mostrarHome() {
+
+    localStorage.setItem("rol", "Desarrollador");
 
     // Cargar la foto del usuario
     let imgPerfilUsuario = document.getElementById("foto-perfil");
@@ -59,27 +66,21 @@ function mostrarHome() {
     let rol = document.getElementById("rol");
     rol.textContent = usuario.rol;
 
-    if (usuario.rol === "Desarrollador") {
-        let divDev = document.getElementsByClassName("project-lider")
-        //divDev.remove();
-        for (let i=0; i < divDev.length; i++) {
-            let divHijo = document.getElementById(divDev.item(i).id);
-            divHijo.style.display = "none";
-            
-        }
-    } else {
-        divDev = document.getElementsByClassName("dev")
-        //divDev.remove();
-        for (let j=0; j < divDev.length; j++) {
-            let divHijo = document.getElementById(divDev.item(j).id);
-            divHijo.style.display = "none";
-            
-        }
-    }
+
 }
 
-function irAProyectos() {
+// function irAProyectos() {
 
-    location.href = "/vista/Proyectos/proyectos.html"
-}
+//     location.href = "/vista/Proyectos/proyectos.html"
+// }
 
+
+// function irAUsuarios() {
+
+//     location.href = "/vista/Team/team.html"
+// }
+
+// function irAEstadisticas() {
+
+//     location.href = "/vista/Estadisticas/estadisticas.html"
+// }

@@ -1,0 +1,203 @@
+#menu-team {
+    scale: 1.15;
+    background-color: rgb(218, 216, 216);
+}
+
+#menu-team:hover {
+    width: 70px;
+    cursor:auto ;
+}
+
+#menu-team:hover p {
+    display: none;
+}
+
+/*Contenedor proyectos*/
+#contenedor-team {
+    height: 100%;
+    width: 85%;
+    margin-top: 30px;
+    z-index: 2;
+    visibility: visible;
+    
+}
+
+/*Icono de registrar*/
+
+#icono-registrar {
+    width: 50px;
+}
+
+/*Registrar Integrante*/
+#registrar-integrante {
+    height: 75%;
+    width: 70%;
+    background-color: rgb(245, 243, 243);
+    border-radius: 30px;
+    position: fixed;
+    top: 70px;
+    padding: 15px;
+    z-index: 3;
+    display:none;
+    
+}
+
+/*Divs de clase info*/
+.info {
+    width: 70%;
+    gap: 3px;
+}
+
+input {
+    width: 70%;
+    padding:5px;
+    text-align: center;
+    
+    
+}
+
+input:active {
+    color: black;
+}
+
+/*Clase dividido*/
+.dividido {
+    width: 100%;
+    padding: 0;
+    
+    
+}
+
+.border-gradiente {
+    /* border-image: linear-gradient(to right, #3acfd5 0%, #3a4ed5 100%) 1;
+    border-radius: 7px;
+    border-width: 3px;
+    border-style: solid; */
+    background: 
+    linear-gradient(#f6f6f6 0 0) padding-box, /*this is your grey background*/
+    linear-gradient(to right, #3783ca 0%, #311a7f 100%) border-box;
+  color: #000000;
+  padding: 5px;
+  border: 3px solid transparent;
+  border-radius: 10px;
+ 
+}
+
+select {
+    width: 60%;
+    padding: 3px;
+    border-radius: 7px;
+
+}
+
+/*Icono de subir foto*/
+#icono-subir-foto {
+    
+    background-color: rgb(227, 227, 227);
+    border-radius: 20%;
+    transition: all 0.3s;
+}
+
+#icono-subir-foto:hover {
+    cursor: pointer;
+    background-color: rgb(221, 220, 220);
+    scale: 1.1;
+    transition: all 0.3s;
+}
+
+#icono-subir-foto:active {
+    background-color: rgb(200, 198, 198);
+    transition: all 0.3s;
+}
+
+#foto-perfil-registro[type='file']::file-selector-button {
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 7px;
+    border: none;
+    background-image: url("/recursos/Images/add-photo-2.png");
+    
+}
+
+#foto-perfil-registro {
+    display: none;
+}
+
+.bots-cancelar-registrar button {
+    width: 45px;
+    height: 45px;
+    border-radius: 45px;
+    border: none;
+}
+
+.icono-registro {
+
+    width: 25px;
+}
+
+#bot-cancelar {
+    background-color: rgb(250, 208, 208);
+    transition: all 0.3s;
+}
+
+#bot-cancelar:hover {
+    background-color: rgb(253, 163, 163);
+}
+
+#bot-cancelar:active {
+    background-color: rgb(254, 135, 135);
+}
+
+
+#bot-confirmar {
+    background-color: rgb(217, 249, 217);
+    transition: all 0.3s;
+}
+
+#bot-confirmar:hover {
+    background-color: rgb(173, 249, 173);
+}
+
+#bot-confirmar:active {
+    background-color: rgb(145, 246, 145);
+}
+
+/*Media Query para el responsive en tamaño celular*/
+
+@media only screen and (max-width: 500px)  {
+
+    #registrar-integrante {
+        width: 85%;
+    }
+
+    #menu-team:hover p {
+        display: block;
+    
+    }
+
+    .dividido {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        width: 100%;
+    }
+    
+    input {
+        width: 100%;
+    }
+
+    select {
+        width: 100%;
+    }
+
+    .texto-fuente-playwrite {
+        font-size: 0.9rem;
+    }
+
+    #icono-subir-foto {
+        width: 30px;
+        
+    }
+
+}

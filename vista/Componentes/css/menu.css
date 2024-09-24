@@ -1,0 +1,107 @@
+/*Tarjetas del menú*/
+.tarjeta-menu {
+    height: 70px;
+    width: 70px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    transition: width 0.3s, scale 0.3s, background-color 0.3s;
+    box-shadow: 10px 10px 25px -7px rgba(209,209,209,1);
+    
+}
+
+.tarjeta-menu:hover {
+    width: 180px;
+    background-color: rgb(241, 238, 238);
+    cursor: pointer;
+    scale: 1.0;
+    transition: width 0.3s, scale 0.3s, background-color 0.3s;
+    transition-timing-function: ease;
+    
+}
+
+.texto-tarjeta-menu {
+    display: none;
+    
+}
+
+.tarjeta-menu:hover .texto-tarjeta-menu {
+    display: block;
+    
+}
+
+.tarjeta-menu:active {
+    background-color: rgb(227, 223, 223);
+    transition: background-color 0.3s ease-in-out;
+}
+
+.icono-tarjeta-menu {
+    width: 50px;
+}
+
+/*Alineaciones horizontales*/
+
+.display-horizontal-around {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.display-horizontal-between {
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+}
+
+
+/*Menú fijo*/
+
+#menu-fixed {
+    position: fixed;
+    top: 150px;
+    left: 10px;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/*Responsive*/
+@media only screen and (max-width: 500px)  {
+
+    #menu-fixed {
+        
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        bottom: 40px;
+        left: auto;
+        top: auto;
+        width: 100%;
+        background-color: white;
+        
+    }
+
+    .icono-tarjeta-menu {
+
+        width: 25px;
+    }
+
+    .tarjeta-menu {
+       
+        box-shadow: none;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .tarjeta-menu:hover {
+
+        width: 70px;
+    }
+
+    .tarjeta-menu p {
+        
+        display: block;
+        font-size: 0.65rem;
+    }
+
+}

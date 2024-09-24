@@ -1,0 +1,24 @@
+#menu-estadisticas {
+    scale: 1.15;
+    background-color: rgb(218, 216, 216);
+}
+
+#menu-estadisticas:hover {
+    width: 70px;
+    cursor:auto ;
+}
+
+#menu-estadisticas:hover p {
+    display: none;
+}
+
+/*Media Query para el responsive en tamaño celular*/
+
+@media only screen and (max-width: 500px)  {
+
+    #menu-estadisticas:hover p {
+        display: block;
+    
+    }
+
+}
