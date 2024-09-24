@@ -1,3 +1,9 @@
+let usuario = {
+    "nombre" : "Carlos Jhoan Aguilar",
+    "rol" : "Desarrollador",
+    "foto" : ""
+}
+
 function initializeFilterSystem() {
     document.body.insertAdjacentHTML('beforeend', `
         <div class="filtroContainer">

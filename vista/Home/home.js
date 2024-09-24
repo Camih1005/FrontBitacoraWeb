@@ -1,18 +1,15 @@
 
+let rol="";
+
 let usuario = {
     "nombre" : "Carlos Jhoan Aguilar",
-    "rol" : "project Manager",
+    "rol" : `${localStorage.getItem("rol")}`,
     "foto" : "perfil.jpeg"
 }
 
+
 let divDev ;
 
-
-if (usuario.rol == "Desarrollador") {
-    divDev  = document.getElementsByClassName("project-lider");
-} else {
-    divDev  = document.getElementsByClassName("dev");
-}
 
 document.body.setAttribute("onload", "mostrarHome()");
 document.getElementById("link-logout").setAttribute("href", "http://127.0.0.1:5501/index.html")
@@ -23,7 +20,7 @@ document.getElementById("bot-estadisticas").setAttribute("onclick", "irAEstadist
 
 function mostrarHome() {
 
-    
+    localStorage.setItem("rol", "Desarrollador");
 
     // Cargar la foto del usuario
     let imgPerfilUsuario = document.getElementById("foto-perfil");
@@ -72,8 +69,18 @@ function mostrarHome() {
 
 }
 
-function irAProyectos() {
+// function irAProyectos() {
 
-    location.href = "/vista/Proyectos/proyectos.html"
-}
+//     location.href = "/vista/Proyectos/proyectos.html"
+// }
 
+
+// function irAUsuarios() {
+
+//     location.href = "/vista/Team/team.html"
+// }
+
+// function irAEstadisticas() {
+
+//     location.href = "/vista/Estadisticas/estadisticas.html"
+// }

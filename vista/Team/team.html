@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/vista/Home/home.css">
+    <link rel="stylesheet" href="/vista/Componentes/css/menu.css">
+    <link rel="stylesheet" href="team.css">
+    <title>Mi Team</title>
+</head>
+<body class="display-vertical-center">
+
+    <!--Contenedor con las opciones principales de Team (Rol : Project Manager)-->
+
+    <div id="contenedor-team" class="d-flex flex-wrap justify-content-center gap-5 alineado-vertical">
+        <div id="bot-ver-team" class="display-vertical-around tarjeta-item">
+            <img src="/recursos/Images/my-team.png" alt="" id="icono-mi-team">
+            <p class="texto-fuente-playwrite letra-bold">Ver mi team</p>
+        </div>
+        <div id="bot-registrar" class="display-vertical-around tarjeta-item">
+            <img src="/recursos/Images/add-user.png" alt="" id="icono-registrar">
+            <p class="texto-fuente-playwrite letra-bold">Registrar</p>
+        </div>
+    </div>
+
+    <!--Formulario de registro del nuevo integrante-->
+    <div id="registrar-integrante" class="display-vertical-around">
+        <div class="dividido display-horizontal-between">
+            <div class="info display-vertical-around">
+                <label for="nombre" class="texto-fuente-playwrite letra-bold" >Nombre</label>
+                <input id="nombre" type="text" class="border-gradiente" placeholder="Nombre">
+            </div>
+            <div class="info display-vertical-around">
+                <label for="usuario" class="texto-fuente-playwrite letra-bold" >Usuario</label>
+                <input id="usuario" type="text" class="border-gradiente" placeholder="Nombre de usuario">
+            </div>
+        </div>
+
+        <div class="dividido display-horizontal-between">
+            <div class="info display-vertical-around">
+                <label for="email" class="texto-fuente-playwrite letra-bold" >Email</label>
+                <input id="email" type="email" class="border-gradiente" placeholder="example@correo.com">
+            </div>
+            <div class="info display-vertical-around">
+                <label for="identificacion" class="texto-fuente-playwrite letra-bold" >Identificación</label>
+                <input id="identificacion" type="text" class="border-gradiente" placeholder="N° Identificación">
+            </div>
+        </div>
+
+        <div class="dividido display-horizontal-between">
+            <div class="info display-vertical-around">
+                <label for="select-rol" class="texto-fuente-playwrite letra-bold">Seleccionar rol</label>
+                <select name="select-rol" id="select-rol" class="border-gradiente"></select>
+            </div>
+    
+            <div class="info display-vertical-around">
+                <label for="foto-perfil-registro" class="texto-fuente-playwrite letra-bold display-horizontal-between gap-2"><img id="icono-subir-foto" src="/recursos/Images/add-photo-2.png" alt=""> Subir foto</label>
+                <input id="foto-perfil-registro" type="file" accept="image/*" class="border-gradiente" readonly>
+                <input id="nombre-foto-perfil" type="text"  class="border-gradiente" readonly>
+            </div>
+        </div>
+
+
+        <div class="bots-cancelar-registrar display-horizontal-between gap-3">
+            <button id="bot-cancelar" ><img src="/recursos/Images/delete.png" alt="" class="icono-registro"></button>
+            <button id="bot-confirmar"><img src="/recursos/Images/check.png" alt="" class="icono-registro"></button>
+        </div>
+        
+    </div>
+
+    <div id="ver-mi-team">
+        
+    </div>
+
+    <script src="/vista/Componentes/js/head.js"></script>
+    <script src="/vista/Componentes/js/nav.js"></script>
+    <script src="/vista/Componentes/js/menu.js" defer></script>
+    <script src="/vista/Componentes/js/footer.js"></script>
+    <script src="/vista/Componentes/js/navegacion.js"></script>
+    <script type="text/javascript" src="./team.js">  </script>
+    
+</body>
+</html>
