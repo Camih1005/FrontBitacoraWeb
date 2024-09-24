@@ -48,39 +48,66 @@ function subirFoto() {
 function realizarRegistro() {
 
     let infoRegistro;
+
     nombreInput =  document.getElementById("nombre");
     let nombre =  nombreInput.value.trim();
-    let usuario = usuarioInput.value.trim();
+
+    usuarioInput = document.getElementById("usuario");
+    let nombreUsuario = usuarioInput.value.trim();
+
+    emailInput = document.getElementById("email");
     let email = emailInput.value.trim();
+
+    identificacionInput = document.getElementById("identificacion");
     let identificacion = identificacionInput.value.trim();
+
+
     let idRol = document.getElementById("select-rol").value;
     let nombreFotoInput = document.getElementById("nombre-foto-perfil");
     let nombreFoto = nombreFotoInput.value;
 
     infoRegistro = {
         "nombre" : `${nombre}`,
-        "usuario" : `${usuario}`,
+        "usuario" : `${nombreUsuario}`,
         "email" : `${email}`,
         "identificacion" : `${identificacion}`,
         "idRol" : `${idRol}`,
         "foto" : `${nombreFoto}`
     }
 
-    // const regex_name = /^[a-zA-Z\s]+$/; //Para comprobar nombres
-    // const regex_whitespace = /\S/; //Regex para comprobar que no esté vacío
-    // //const regex_identificacion = /^[0-9]+$/; //regex para comprobar el número de teléfono
-    // const regex_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g; //reex para comprobar el email
+    const regex_name = /^[a-zA-Z\s]+$/; //Para comprobar nombres
+    const regex_whitespace = /\S/; //Regex para comprobar que no esté vacío
+    const regex_identificacion = /^[0-9]+$/; //regex para comprobar la dentificación
+    const regex_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g; //reex para comprobar el email
 
     // arr_id_input = [["nombre", Boolean(regex_whitespace.test(name_value)*regex_name.test(name_value))],
     //                 ["email", regex_email.test(email_value) ] ,
     //                 ["celular", regex_cel.test(celular_value)] ];
 
-    if (nombre == "") {
-        console.log(nombreInput.value)
-        nombreInput.value = "Ingrese un nombre";
-        nombreInput.style.color = "red"
-    }
+    if  (Boolean(regex_whitespace.test(nombreUsuario)*regex_name.test(nombreUsuario))== false) {
 
+        usuarioInput.value = "Usuario NO permitido";
+        usuarioInput.style.color = "red";
+
+    } else if(regex_identificacion.test(identificacion) == false) {
+
+        identificacionInput.value = "Identificación NO permitida";
+        identificacionInput.style.color = "red";
+
+    }
+    
+    
+    if(Boolean(regex_whitespace.test(nombre)*regex_name.test(nombre))== false) {
+        
+        nombreInput.value = "Nombre NO permitido";
+        nombreInput.style.color = "red";
+
+    } else if(regex_email.test(email) == false) {
+        
+        emailInput.value = "Email NO permitido";
+        emailInput.style.color = "red";
+
+    } 
 
 }
 
