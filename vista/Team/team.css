@@ -55,6 +55,10 @@ input {
     
 }
 
+input:active {
+    color: black;
+}
+
 /*Clase dividido*/
 .dividido {
     width: 100%;
