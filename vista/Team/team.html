@@ -10,6 +10,8 @@
 </head>
 <body class="display-vertical-center">
 
+    <!--Contenedor con las opciones principales de Team (Rol : Project Manager)-->
+
     <div id="contenedor-team" class="d-flex flex-wrap justify-content-center gap-5 alineado-vertical">
         <div id="bot-ver-team" class="display-vertical-around tarjeta-item">
             <img src="/recursos/Images/my-team.png" alt="" id="icono-mi-team">
@@ -21,22 +23,47 @@
         </div>
     </div>
 
-    <div id="registrar-integrante">
-        <div class="info">
-            <label for="nombre">Nombre</label>
-            <input id="nombre" type="text">
-        </div>
-        <div class="info">
-            <label for="usuario">Usuario</label>
-            <input id="usuario" type="text">
-        </div>
-        <div class="dividido">
-            <div class="info">
-                <label for="email">Email</label>
-                <input id="email" type="email">
+    <!--Formulario de registro del nuevo integrante-->
+    <div id="registrar-integrante" class="display-vertical-around">
+        <div class="dividido display-horizontal-between">
+            <div class="info display-vertical-around">
+                <label for="nombre" class="texto-fuente-playwrite letra-bold" >Nombre</label>
+                <input id="nombre" type="text" class="border-gradiente" placeholder="Nombre del nuevo integrante">
             </div>
-            
-            
+            <div class="info display-vertical-around">
+                <label for="usuario" class="texto-fuente-playwrite letra-bold">Usuario</label>
+                <input id="usuario" type="text" class="border-gradiente">
+            </div>
+        </div>
+
+        <div class="dividido display-horizontal-between">
+            <div class="info display-vertical-around">
+                <label for="email" class="texto-fuente-playwrite letra-bold">Email</label>
+                <input id="email" type="email" class="border-gradiente">
+            </div>
+            <div class="info display-vertical-around">
+                <label for="identificacion" class="texto-fuente-playwrite letra-bold">Identificación</label>
+                <input id="identificacion" type="email" class="border-gradiente">
+            </div>
+        </div>
+
+        <div class="dividido display-horizontal-between">
+            <div class="info display-vertical-around">
+                <label for="select-rol" class="texto-fuente-playwrite letra-bold">Seleccionar rol</label>
+                <select name="select-rol" id="select-rol" class="border-gradiente"></select>
+            </div>
+    
+            <div class="info display-vertical-around">
+                <label for="foto-perfil-registro" class="texto-fuente-playwrite letra-bold display-horizontal-between gap-2"><img id="icono-subir-foto" src="/recursos/Images/add-photo-2.png" alt=""> Subir foto</label>
+                <input id="foto-perfil-registro" type="file" accept="image/*" class="border-gradiente" readonly>
+                <input id="nombre-foto-perfil" type="text"  class="border-gradiente" readonly>
+            </div>
+        </div>
+
+
+        <div class="bots-cancelar-registrar display-horizontal-between gap-3">
+            <button id="bot-cancelar" ><img src="/recursos/Images/delete.png" alt="" class="icono-registro"></button>
+            <button id="bot-confirmar"><img src="/recursos/Images/check.png" alt="" class="icono-registro"></button>
         </div>
         
     </div>
