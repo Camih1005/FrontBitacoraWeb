@@ -14,12 +14,17 @@ document.getElementById("bot-confirmar").setAttribute("onclick", "realizarRegist
 
 let nombreInput =  document.getElementById("nombre");
 nombreInput.setAttribute("onclick", "cambiarColor(nombreInput)")
+
 let usuarioInput = document.getElementById("usuario");
 usuarioInput.setAttribute("onclick", "cambiarColor(usuarioInput)")
+
 let emailInput = document.getElementById("email");
 emailInput.setAttribute("onclick", "cambiarColor(emailInput)")
+
 let identificacionInput = document.getElementById("identificacion");
 identificacionInput.setAttribute("onclick", "cambiarColor(identificacionInput)")
+
+let nombreFotoInput = document.getElementById("nombre-foto-perfil");
 
 
 function cargar() {  
@@ -41,6 +46,8 @@ function cerrarFormularioRegistro() {
     usuarioInput.value = "";
     emailInput.value = "";
     identificacionInput.value = "";
+
+    nombreFotoInput = document.getElementById("nombre-foto-perfil");
     nombreFotoInput.value="";
 
 
