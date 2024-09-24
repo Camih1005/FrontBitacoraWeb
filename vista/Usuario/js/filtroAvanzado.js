@@ -1,3 +1,11 @@
+// import {getCategories} from "/controlador/roles"
+
+// let isd = await getCategories(rolId)
+
+// rolId = 3
+
+// console.log(isd)
+
 function initializeFilterSystem() {
     document.body.insertAdjacentHTML('beforeend', `
         <div class="filtroContainer">
@@ -55,6 +63,7 @@ function initializeFilterSystem() {
                         <button type="button" class="btn btn-danger" id="deleteActivityButton">Eliminar Actividad</button>
                         <button type="button" class="btn btn-success" id="completedActivityButton">Empezar actividad</button>
                         <button type="button" class="btn btn-warning" id="pausedActivityButton">Pausar actividad</button>
+                        <button type="button" class="btn btn-info" id="resumeActivityButton">Reanudar actividad</button>
                     </div>
                 </div>
             </div>
@@ -82,8 +91,8 @@ function initializeFilterSystem() {
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="timeEstimationModalLabel">Estimación de tiempo</h5>
-                        <button type ="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h 5 class="modal-title" id="timeEstimationModalLabel">Estim ación de tiempo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <label for="timeEstimationInput">Ingrese el tiempo estimado para la actividad (en minutos):</label>
@@ -170,54 +179,68 @@ function initializeFilterSystem() {
 
 function initializeFilter(navLinks, filteredItems, searchInput, cronometroElement) {
     const items = [
-        { id: 1, name: 'Actividad A', date: '2023-05-15', description: 'Descripción de la Actividad A', creationDate: '2023-01-10', timeEstimation: null },
-        { id: 2, name: 'Tarea B', date: '2023-06-20', description: 'Descripción de la Tarea B', creationDate: '2023-01-15', timeEstimation: null },
-        { id: 3, name: 'Evento C', date: '2023-04-10', description: 'Descripción del Evento C', creationDate: '2023-01-20', timeEstimation: null },
-        { id: 4, name: 'Proyecto D', date: '2023-07-05', description: 'Descripción del Proyecto D', creationDate: '2023-01-25', timeEstimation: null },
-        { id: 5, name: 'Curso E', date: '2023-03-25', description: 'Descripción del Curso E', creationDate: '2023-02-05', timeEstimation: null },
+        { id: 1, name: 'Actividad A', date: '2023-05-15', description: 'Descripción de la Actividad A', creationDate: '2023-01-10', timeEstimation: null, cronometroInterval: null, cronometroStartTime: null },
+        { id: 2, name: 'Tarea B', date: '2023-06-20', description: 'Descripción de la Tarea B', creationDate: '2023-01-15', timeEstimation: null, cronometroInterval: null, cronometroStartTime: null },
+        { id: 3, name: 'Evento C', date: '2023-04-10', description: 'Descripción del Evento C', creationDate: '2023-01-20', timeEstimation: null, cronometroInterval: null, cronometroStartTime: null },
+        { id: 4, name: 'Proyecto D', date: '2023-07-05', description: 'Descripción del Proyecto D', creationDate: '2023- 01-25', timeEstimation: null, cronometroInterval: null, cronometroStartTime: null },
+        { id : 5, name: 'Curso E', date: '2023-03-25', description: 'Descripción del Curso E', creationDate: '2023-02-05', timeEstimation: null, cronometroInterval: null, cronometroStartTime: null },
     ];
 
-    let cronometroInterval = null;
-    let cronometroStartTime = null;
-    let currentActivity = null;
-    let lastActivityDuration = null;
-
-    function startCronometro() {
-        cronometroStartTime = Date.now();
-        cronometroInterval = setInterval(() => {
-          const elapsedTime = Date.now() - cronometroStartTime;
-          const hours = Math.floor(elapsedTime / 3600000);
-          const minutes = Math.floor((elapsedTime % 3600000) / 60000);
-          const seconds = Math.floor((elapsedTime % 60000) / 1000);
-          cronometroElement.textContent = `Cronómetro: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    function startCronometro(item) {
+        item.cronometroStartTime = Date.now();
+        item.cronometroInterval = setInterval(() => {
+            const elapsedTime = Date.now() - item.cronometroStartTime;
+            const hours = Math.floor(elapsedTime / 3600000);
+            const minutes = Math.floor((elapsedTime % 3600000) / 60000);
+            const seconds = Math.floor((elapsedTime % 60000) / 1000);
+            cronometroElement.textContent = `Cronómetro: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
       
-          const progressBar = document.getElementById('progress-bar');
-          if (progressBar) {
-            const progress = (elapsedTime / currentActivity.timeEstimation) * 100;
-            progressBar.style.width = `${progress}%`;
-            progressBar.ariaValueNow = progress;
+            const progressBar = document.getElementById(`progress-bar-${item.id}`);
+            if (progressBar) {
+                const progress = (elapsedTime / item.timeEstimation) * 100;
+                progressBar.style.width = `${progress}%`;
+                progressBar.ariaValueNow = progress;
+                document.getElementById(`progress-text-${item.id}`).textContent = `${Math.round(progress)}%`;
       
-            if (progress >= 100) {
-              clearInterval(cronometroInterval);
-              showNotification('Se acabó el tiempo de la actividad. Esperamos que todo te haya salido bien.', 'success');
-              playSound('/path/to/your/repo/audio_file.mp3');
+                if (progress >= 100) {
+                    clearInterval(item.cronometroInterval);
+                    showNotification('Se acabó el tiempo de la actividad. Esperamos que todo te haya salido bien.', 'success');
+                    playSound('/path/to/your/repo/audio_file.mp3');
+                }
             }
-          }
         }, 1000);
-      }
-      
-      function playSound(url) {
-        const audio = new Audio(url);
-        audio.play();
-      }
-      
-      
+    }
 
-    function stopCronometro() {
-        clearInterval(cronometroInterval);
+    function stopCronometro(item) {
+        clearInterval(item.cronometroInterval);
         cronometroElement.textContent = 'Cronómetro: 00:00:00';
-        cronometroStartTime = null;
-        currentActivity = null;
+        item.cronometroStartTime = null;
+    }
+
+    function resumeCronometro(item) {
+        if (item.cronometroInterval === null) {
+            item.cronometroInterval = setInterval(() => {
+                const elapsedTime = Date.now() - item.cronometroStartTime;
+                const hours = Math.floor(elapsedTime / 3600000);
+                const minutes = Math.floor((elapsedTime % 3600000) / 60000);
+                const seconds = Math.floor((elapsedTime % 60000) / 1000);
+                cronometroElement.textContent = `Cronómetro: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+      
+                const progressBar = document.getElementById(`progress-bar-${item.id}`);
+                if (progressBar) {
+                    const progress = (elapsedTime / item.timeEstimation) * 100;
+                    progressBar.style.width = `${progress}%`;
+                    progressBar.ariaValueNow = progress;
+                    document.getElementById(`progress-text-${item.id}`).textContent = `${Math.round(progress)}%`;
+      
+                    if (progress >= 100) {
+                        clearInterval(item.cronometroInterval);
+                        showNotification('Se acabó el tiempo de la actividad. Esperamos que todo te haya salido bien.', 'success');
+                        playSound('/path/to/your/repo/audio_file.mp3');
+                    }
+                }
+            }, 1000);
+        }
     }
 
     function highlightText(text, searchTerm) {
@@ -252,14 +275,15 @@ function initializeFilter(navLinks, filteredItems, searchInput, cronometroElemen
 
             filteredContent += `
     <div class="col-12 mb-3">
-        <div class="card" data-id="${item.id}">
+        <div class ="card" data-id="${item.id}">
             <div class="card-body">
                 <h5 class="card-title">${highlightedName}</h5>
                 <p class="card-text">${highlightedDescription}</p>
                 <p class="card-text"><small class="text-muted">Fecha: ${item.date}</small></p>
             </div>
            <div class="progress">
-  <div class="progress-bar progress-bar-striped progress-bar-animated" id="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+  <div class="progress-bar progress-bar-striped progress-bar-animated" id="progress-bar-${item.id}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%"></div>
+  <span id="progress-text-${item.id}">0%</span>
 </div>
         </div>
         
@@ -286,17 +310,19 @@ function initializeFilter(navLinks, filteredItems, searchInput, cronometroElemen
         const deleteButton = document.getElementById('deleteActivityButton');
         const completeButton = document.getElementById('completedActivityButton');
         const pauseButton = document.getElementById('pausedActivityButton');
+        const resumeButton = document.getElementById('resumeActivityButton');
 
         modalTitle.textContent = item.name;
         modalDescription.textContent = item.description;
-        modalDate.textContent = `Fecha: ${item.date}`;
+        modalDate.textContent = `Fecha : ${item.date}`;
 
         // Mostrar el modal
         const modal = new bootstrap.Modal(document.getElementById('activityModal'));
         modal.show();
 
-        completeButton.style.display = currentActivity ? 'none' : 'inline-block';
-        pauseButton.style.display = currentActivity ? 'inline-block' : 'none';
+        completeButton.style.display = item.cronometroInterval ? 'none' : 'inline-block';
+        pauseButton.style.display = item.cronometroInterval ? 'inline-block' : 'none';
+        resumeButton.style.display = item.cronometroInterval ? 'none' : 'inline-block';
 
         completeButton.onclick = () => {
             const timeEstimationModal = new bootstrap.Modal(document.getElementById('timeEstimationModal'));
@@ -305,7 +331,7 @@ function initializeFilter(navLinks, filteredItems, searchInput, cronometroElemen
                 const timeEstimation = parseInt(document.getElementById('timeEstimationInput').value, 10);
                 if (timeEstimation > 0) {
                     item.timeEstimation = timeEstimation * 60 * 1000; // Convertir minutos a milisegundos
-                    confirmStartActivity(item);
+                    startCronometro(item);
                     timeEstimationModal.hide();
                 } else {
                     showNotification('Por favor, ingrese un tiempo estimado válido', 'danger');
@@ -314,8 +340,14 @@ function initializeFilter(navLinks, filteredItems, searchInput, cronometroElemen
         };
 
         pauseButton.onclick = () => {
-            stopCronometro();
+            stopCronometro(item);
             showNotification('Actividad pausada', 'info');
+            modal.hide();
+        };
+
+        resumeButton.onclick = () => {
+            resumeCronometro(item);
+            showNotification('Actividad reanudada', 'info');
             modal.hide();
         };
 
@@ -323,17 +355,6 @@ function initializeFilter(navLinks, filteredItems, searchInput, cronometroElemen
             deleteActivity(item.id);
             modal.hide();
         };
-    }
-
-    function confirmStartActivity(item) {
-        const success = Math.random() > 0.2; // 80% de probabilidad de éxito
-        if (success) {
-            currentActivity = item;
-            startCronometro();
-            showNotification('La actividad ha comenzado correctamente', 'success');
-        } else {
-            showNotification('No se pudo iniciar la actividad. Por favor, intente nuevamente.', 'danger');
-        }
     }
 
     function deleteActivity(id) {
@@ -371,27 +392,6 @@ function initializeFilter(navLinks, filteredItems, searchInput, cronometroElemen
         const searchTerm = searchInput.value.trim();
         filterItems(activeFilter, searchTerm);
     });
-
-    cronometroElement.addEventListener('click', () => {
-        if (currentActivity) {
-            const finishModal = new bootstrap.Modal(document.getElementById('finishActivityModal'));
-            finishModal.show();
-            document.getElementById('confirmFinishButton').onclick = () => {
-                const endTime = Date.now();
-                lastActivityDuration = endTime - cronometroStartTime;
-                stopCronometro();
-                showNotification(`Actividad finalizada. Duración: ${formatDuration(lastActivityDuration)}`, 'success');
-                finishModal.hide();
-            };
-        }
-    });
-
-    function formatDuration(duration) {
-        const hours = Math.floor(duration / 3600000);
-        const minutes = Math.floor((duration % 3600000) / 60000);
-        const seconds = Math.floor((duration % 60000) / 1000);
-        return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-    }
 
     filterItems('all');
 }
