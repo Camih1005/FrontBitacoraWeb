@@ -36,6 +36,14 @@ function desplegarFormularioRegistro() {
 function cerrarFormularioRegistro() {
     let divFormulario = document.getElementById("registrar-integrante"); 
     divFormulario.style.display="none";
+
+    nombreInput.value = "";
+    usuarioInput.value = "";
+    emailInput.value = "";
+    identificacionInput.value = "";
+    nombreFotoInput.value="";
+
+
     
 }
 
