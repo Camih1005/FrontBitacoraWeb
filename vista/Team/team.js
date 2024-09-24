@@ -1,4 +1,3 @@
-/*Simulación de la info del usuario*/
 let usuario = {
     "nombre" : "Carlos Jhoan Aguilar",
     "rol" : "Desarrollador",
@@ -11,10 +10,4 @@ document.body.setAttribute("onload", "cargar()");
 
 function cargar() {  
 
-    
-    
-
 }
-
-
-

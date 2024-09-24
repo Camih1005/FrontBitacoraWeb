@@ -1,0 +1,39 @@
+#menu-team {
+    scale: 1.15;
+    background-color: rgb(218, 216, 216);
+}
+
+#menu-team:hover {
+    width: 70px;
+    cursor:auto ;
+}
+
+#menu-team:hover p {
+    display: none;
+}
+
+/*Contenedor proyectos*/
+#contenedor-team {
+    height: 100%;
+    width: 85%;
+    margin-top: 30px;
+    z-index: 2;
+    visibility: collapse;
+}
+
+/*Icono de registrar*/
+
+#icono-registrar {
+    width: 50px;
+}
+
+/*Media Query para el responsive en tamaño celular*/
+
+@media only screen and (max-width: 500px)  {
+
+    #menu-team:hover p {
+        display: block;
+    
+    }
+
+}

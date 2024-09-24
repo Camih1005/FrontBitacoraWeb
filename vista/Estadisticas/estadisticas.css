@@ -1,16 +1,14 @@
-/*tarje del menú: Proyectos*/
-
-#menu-proyectos {
+#menu-estadisticas {
     scale: 1.15;
     background-color: rgb(218, 216, 216);
 }
 
-#menu-proyectos:hover {
+#menu-estadisticas:hover {
     width: 70px;
     cursor:auto ;
 }
 
-#menu-proyectos:hover p {
+#menu-estadisticas:hover p {
     display: none;
 }
 
@@ -18,7 +16,7 @@
 
 @media only screen and (max-width: 500px)  {
 
-    #menu-proyectos:hover p {
+    #menu-estadisticas:hover p {
         display: block;
     
     }
