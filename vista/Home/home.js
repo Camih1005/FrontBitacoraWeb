@@ -7,11 +7,6 @@ let usuario = {
     "foto" : "perfil.jpeg"
 }
 
-// if (rol="") {
-//     rol = localStorage.getItem("rol");
-//     usuario.rol = rol;
-// }
-
 
 let divDev ;
 
@@ -25,7 +20,7 @@ document.getElementById("bot-estadisticas").setAttribute("onclick", "irAEstadist
 
 function mostrarHome() {
 
-    localStorage.setItem("rol", "Project Manager");
+    localStorage.setItem("rol", "Desarrollador");
 
     // Cargar la foto del usuario
     let imgPerfilUsuario = document.getElementById("foto-perfil");
@@ -74,18 +69,18 @@ function mostrarHome() {
 
 }
 
-function irAProyectos() {
+// function irAProyectos() {
 
-    location.href = "/vista/Proyectos/proyectos.html"
-}
+//     location.href = "/vista/Proyectos/proyectos.html"
+// }
 
 
-function irAUsuarios() {
+// function irAUsuarios() {
 
-    location.href = "/vista/Team/team.html"
-}
+//     location.href = "/vista/Team/team.html"
+// }
 
-function irAEstadisticas() {
+// function irAEstadisticas() {
 
-    location.href = "/vista/Estadisticas/estadisticas.html"
-}
+//     location.href = "/vista/Estadisticas/estadisticas.html"
+// }

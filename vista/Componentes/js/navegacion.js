@@ -17,3 +17,8 @@ function irAEstadisticas() {
 
     location.href = "/vista/Estadisticas/estadisticas.html"
 }
+
+function irAActividades() {
+
+    location.href = "/vista/Usuario/userAct.html"
+}
