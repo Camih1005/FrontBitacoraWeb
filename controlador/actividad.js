@@ -16,3 +16,24 @@ async function getActividad() {
     return response.json();
   }
   
+
+  async function sendUpdatesToServer() {
+    try {
+        const response = await fetch('/api/developer-updates', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(developerUpdates)
+        });
+
+        if (response.ok) {
+            console.log('Actualizaciones enviadas con éxito');
+            developerUpdates.activities = [];
+        } else {
+            console.error('Error al enviar actualizaciones');
+        }
+    } catch (error) {
+        console.error('Error al enviar actualizaciones:', error);
+    }
+}

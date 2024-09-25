@@ -3,9 +3,10 @@
 }
 
 .filtroContainer{
-    width: 80%;
+    width: 70%;
     margin: 0 auto;
-    
+    margin-top: 100px;
+    margin-bottom: 200px;
     
 }
 .sticky-top {
@@ -71,6 +72,14 @@ menu{
 }
 
 @media only screen and (max-width: 600px) {
+
+    .filtroContainer{
+        width: 90%;
+        margin: 0 auto;
+        margin-top: 100px;
+        
+        
+    }
 
     /* .tarjeta-menu {
 
