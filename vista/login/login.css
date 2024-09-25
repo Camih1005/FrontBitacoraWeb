@@ -1,0 +1,38 @@
+.centrado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+#login-div {
+    width: 70%;
+    height: 100vh;
+}
+
+#login-div-container {
+width: 100%;
+}
+
+.login-button {
+    width: 150px;
+    height: 60px;
+    border-radius: 60px;
+} 
+
+#nombre-app {
+    font-family: "Permanent Marker", cursive;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 2.0rem;
+}
+
+@media only screen and (max-width: 500px) {
+
+    #login-div {
+    width: 100%;
+    height: 100vh;
+}          
+
+}
