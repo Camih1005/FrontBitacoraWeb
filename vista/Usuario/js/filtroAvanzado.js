@@ -1,4 +1,4 @@
-// import { cargarbody } from "/controlador/actividad.js";
+
 
 
 // (async () => {
@@ -15,6 +15,7 @@ let usuario = {
     "rol": "Desarrollador",
     "foto": ""
 }
+
 
 console.log(usuario)
 
@@ -100,7 +101,7 @@ function initializeFilterSystem() {
         </div>
 
         <div class="modal fade" id="timeEstimationModal" tabindex="-1" aria-labelledby="timeEstimationModalLabel" aria-hidden="true">
- <div class="modal-dialog">
+<div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="timeEstimationModalLabel">Estimación de tiempo</h5>
@@ -198,7 +199,24 @@ function initializeFilterSystem() {
     }, 100);
 }
 
-function initializeFilter(navLinks, filteredItems, searchInput) {
+async function initializeFilter(navLinks, filteredItems, searchInput) {
+   
+    async function itemsx() {
+        const getActividade = await getActividad(); // Assuming getActividad() is an async function.
+        
+        // Use map to collect the result and return the array of elements
+        const elements = getActividade.map(element => {
+            console.log(element.nombre);  // Log the activity name
+            return element;
+        });
+        
+        return elements; // Return the array of elements
+    }
+
+    let ed = await itemsx();  // Wait for the async function to resolve
+
+    console.log(ed[0].id);  
+   
     const items = [
         { id: 1, name: 'Actividad A', date: '2023-05-15', description: 'Descripción de la Actividad A', creationDate: '2023-01-10', project: 'Proyecto 1', lider: 'Lider 1', encargado: null, timeEstimation: null, cronometroInterval: null, cronometroStartTime: null, estado: 'pendiente' },
         { id: 2, name: 'Tarea B', date: '2023-06-20', description: 'Descripción de la Tarea B', creationDate: '2023-01-15', project: 'Proyecto 2', lider: 'Lider 2', encargado: null, timeEstimation: null, cronometroInterval: null, cronometroStartTime: null, estado: 'pendiente' },
@@ -236,9 +254,12 @@ function initializeFilter(navLinks, filteredItems, searchInput) {
         return text.replace(regex, '<span class="highlight">$1</span>');
     }
 
-    function filterItems(filter, searchTerm = '') {
+    async function filterItems(filter, searchTerm = '') {
         let filteredContent = '';
         let itemsToShow = [...items];
+/**FOR EACH PARA  */
+        
+       
 
         if (filter === 'description') {
             itemsToShow.sort((a, b) => a.description.localeCompare(b.description));
@@ -302,7 +323,7 @@ function initializeFilter(navLinks, filteredItems, searchInput) {
                 </div>
             `;
         });
-
+    
         filteredItems.innerHTML = filteredContent || '<p class="col-12">No se encontraron resultados.</p>';
 
         const cards = filteredItems.querySelectorAll('.card');
