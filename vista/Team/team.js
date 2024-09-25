@@ -1,10 +1,13 @@
 let usuario = {
     "nombre" : "Carlos Jhoan Aguilar",
-    "rol" : "Desarrollador",
+    "rol" : "Project Manager",
     "foto" : ""
 }
 
 usuario.rol = localStorage.getItem("rol");
+
+let jsonRoles;
+let hashRol= {};
 
 document.body.setAttribute("onload", "cargar()");
 document.getElementById("bot-registrar").setAttribute("onclick", "desplegarFormularioRegistro()")
@@ -28,14 +31,46 @@ let nombreFotoInput = document.getElementById("nombre-foto-perfil");
 
 
 function cargar() {  
-    console.log(document.getElementById("foto-perfil-registro").textContent)
+    
+    const urlApiRoles = 'https://satisfied-rejoicing-production.up.railway.app/api/rol';
+    
+    fetch (urlApiRoles, {
+        method: 'GET',
+        mode: "cors",
+        headers: {
+        'Content-type' : 'application/json; charset=UTF-8',
+        'Access-Control-Allow-Origin': '*',
+        }, 
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        let selectorRol = document.getElementById("select-rol");
+        jsonRoles = data.slice(1, 3);
+        
+
+        jsonRoles.forEach(nuevoRol => {
+
+            hashRol[nuevoRol.nombre] = nuevoRol.id;
+
+            let elementoOptionRol = document.createElement("option");
+            elementoOptionRol.value= nuevoRol.nombre;
+            elementoOptionRol.textContent = nuevoRol.nombre;
+            selectorRol.appendChild(elementoOptionRol);
+        });
+
+        console.log(jsonRoles)
+        
+        
+    });
+
 }
+
 
 function desplegarFormularioRegistro() {
     let divFormulario = document.getElementById("registrar-integrante"); 
     divFormulario.style.display="flex"
-    
-    
+      
 }
 
 function cerrarFormularioRegistro() {
@@ -62,7 +97,10 @@ function subirFoto() {
 
 function realizarRegistro() {
 
-    let infoRegistro;
+    let infoRegistro = {};
+    const urlRegistrarIntegrante = "https://satisfied-rejoicing-production.up.railway.app/auth/registro";
+
+    selectorRol = document.getElementById("nombre");
 
     nombreInput =  document.getElementById("nombre");
     let nombre =  nombreInput.value.trim();
@@ -76,30 +114,23 @@ function realizarRegistro() {
     identificacionInput = document.getElementById("identificacion");
     let identificacion = identificacionInput.value.trim();
 
+    let rolSelector = document.getElementById("select-rol");
+    let nombreRol = rolSelector.value;
 
-    let idRol = document.getElementById("select-rol").value;
     let nombreFotoInput = document.getElementById("nombre-foto-perfil");
     let nombreFoto = nombreFotoInput.value;
 
-    infoRegistro = {
-        "nombre" : `${nombre}`,
-        "usuario" : `${nombreUsuario}`,
-        "email" : `${email}`,
-        "identificacion" : `${identificacion}`,
-        "idRol" : `${idRol}`,
-        "foto" : `${nombreFoto}`
-    }
-
+    
+    /*Expresiones regulares para validar información */
     const regex_name = /^[a-zA-Z\s]+$/; //Para comprobar nombres
+    const regex_usuario = /^([a-z0-9]+)$/i; //para probar nombe de usuario
     const regex_whitespace = /\S/; //Regex para comprobar que no esté vacío
     const regex_identificacion = /^[0-9]+$/; //regex para comprobar la dentificación
     const regex_email = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g; //reex para comprobar el email
 
-    // arr_id_input = [["nombre", Boolean(regex_whitespace.test(name_value)*regex_name.test(name_value))],
-    //                 ["email", regex_email.test(email_value) ] ,
-    //                 ["celular", regex_cel.test(celular_value)] ];
+    
 
-    if  (Boolean(regex_whitespace.test(nombreUsuario)*regex_name.test(nombreUsuario))== false) {
+    if  (regex_usuario.test(nombreUsuario)== false) {
 
         usuarioInput.value = "Usuario NO permitido";
         usuarioInput.style.color = "red";
@@ -122,7 +153,59 @@ function realizarRegistro() {
         emailInput.value = "Email NO permitido";
         emailInput.style.color = "red";
 
-    } 
+    } else {
+
+        if (nombreFoto == "") {
+            nombreFoto = "sin-foto";
+        }
+
+        infoRegistro = {
+            "username" : `${nombreUsuario}`,
+            "nombre" : `${nombre}`,
+            "password": `${identificacion}`,
+            "profilepic": `${nombreFoto}`,
+            "cedula" : `${identificacion}`,
+            "correo" : `${email}`,
+            "rolRegistrador": "Project Manager",
+            "rol": {
+                "id": `${hashRol[nombreRol]}`,
+                "nombre": `${nombreRol}`
+            }
+        }
+
+        
+
+        /* Registor del nuevo integrante */
+        fetch(urlRegistrarIntegrante, {
+            
+            method : 'POST',
+            body : JSON.stringify(infoRegistro),
+            headers : {
+                'Content-type' : 'application/json; charset=UTF-8',
+                'Access-Control-Allow-Origin': '*',
+            }
+        })
+        .then(response => response.status)
+        .then(data => {
+            
+            if(data == 200 ) {
+                alert("Se ha regsitrado un nuevo integrante exitosamente!")
+                console.log(infoRegistro);
+                cerrarFormularioRegistro();
+
+            } else {
+                alert("Error al registrar");
+
+                // nombreInput.value = "";
+                // usuarioInput.value = "";
+                // emailInput.value = "";
+                // identificacionInput.value = "";
+                // nombreFotoInput.value = "";
+            }
+
+        })
+        
+    }
 
 }
 
