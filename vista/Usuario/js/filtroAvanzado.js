@@ -1,26 +1,56 @@
-
-
-
-// (async () => {
-//     try {
-//         let car = await cargarbody();
-//         console.log(car);
-//     } catch (error) {
-//         console.error('Error:', error);
-//     }
-// })();
-
 let usuario = {
+    "id": "1",
     "nombre": "Carlos Jhoan Aguilar",
     "rol": "Desarrollador",
     "foto": ""
+};
+
+let developerUpdates = {
+    userId: usuario.id,
+    activities: []
+};
+
+function addUpdate(activityId, updateType, details) {
+    developerUpdates.activities.push({
+        activityId: activityId,
+        updateType: updateType,
+        timestamp: new Date().toISOString(),
+        details: details
+    });
+    console.log('Actualización añadida:', developerUpdates);
 }
 
+async function sendUpdatesToServer() {
+    console.log('Intentando enviar actualizaciones al servidor:', developerUpdates);
+    // Comentamos el código de envío real por ahora
+    /*
+    try {
+        const response = await fetch('/api/developer-updates', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(developerUpdates)
+        });
 
-console.log(usuario)
-
+        if (response.ok) {
+            console.log('Actualizaciones enviadas con éxito');
+            developerUpdates.activities = [];
+        } else {
+            console.error('Error al enviar actualizaciones');
+        }
+    } catch (error) {
+        console.error('Error al enviar actualizaciones:', error);
+    }
+    */
+    console.log('Simulando envío exitoso. Limpiando actividades.');
+    developerUpdates.activities = [];
+}
 
 function initializeFilterSystem() {
+    console.log('Inicializando sistema de filtros');
+    console.log('Usuario actual:', usuario);
+
     document.body.insertAdjacentHTML('beforeend', `
         <div class="filtroContainer my-5">
         <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
@@ -101,7 +131,7 @@ function initializeFilterSystem() {
         </div>
 
         <div class="modal fade" id="timeEstimationModal" tabindex="-1" aria-labelledby="timeEstimationModalLabel" aria-hidden="true">
-<div class="modal-dialog">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="timeEstimationModalLabel">Estimación de tiempo</h5>
@@ -184,6 +214,10 @@ function initializeFilterSystem() {
             background-color: yellow;
             font-weight: bold;
         }
+            .card-footer a{
+            width : auto;
+            height : 50px;
+            }
     `;
     document.head.appendChild(style);
 
@@ -194,45 +228,65 @@ function initializeFilterSystem() {
 
         if (navLinks.length && filteredItems && searchInput) {
             clearInterval(checkElementsAndInitialize);
-            initializeFilter(navLinks, filteredItems, searchInput);
+            console.log('Elementos encontrados, inicializando filtro');
+            initializeFilter(navLinks, filteredItems, searchInput, usuario);
         }
     }, 100);
 }
 
-async function initializeFilter(navLinks, filteredItems, searchInput) {
-   
-    async function itemsx() {
-        const getActividade = await getActividad(); // Assuming getActividad() is an async function.
-        
-        // Use map to collect the result and return the array of elements
-        const elements = getActividade.map(element => {
-            console.log(element.nombre);  // Log the activity name
-            return element;
-        });
-        
-        return elements; // Return the array of elements
-    }
-
-    let ed = await itemsx();  // Wait for the async function to resolve
-
-    console.log(ed[0].id);  
-   
-    const items = [
-        { id: 1, name: 'Actividad A', date: '2023-05-15', description: 'Descripción de la Actividad A', creationDate: '2023-01-10', project: 'Proyecto 1', lider: 'Lider 1', encargado: null, timeEstimation: null, cronometroInterval: null, cronometroStartTime: null, estado: 'pendiente' },
-        { id: 2, name: 'Tarea B', date: '2023-06-20', description: 'Descripción de la Tarea B', creationDate: '2023-01-15', project: 'Proyecto 2', lider: 'Lider 2', encargado: null, timeEstimation: null, cronometroInterval: null, cronometroStartTime: null, estado: 'pendiente' },
-        { id: 3, name: 'Evento C', date: '2023-04-10', description: 'Descripción del Evento C', creationDate: '2023-01-20', project: 'Proyecto 1', lider: ' Lider 1', encargado: 'Desarrollador 1', timeEstimation: null, cronometroInterval: null, cronometroStartTime: null, estado: 'en proceso' },
-        { id: 4, name: 'Proyecto D', date: '2023-07-05', description: 'Descripción del Proyecto D', creationDate: '2023-01-25', project: 'Proyecto 3', lider: 'Lider 3', encargado: null, timeEstimation: null, cronometroInterval: null, cronometroStartTime: null, estado: 'pendiente' },
-        { id: 5, name: 'Curso E', date: '2023-03-25', description: 'Descripción del Curso E', creationDate: '2023-02-05', project: 'Proyecto 2', lider: 'Lider 2', encargado: null, timeEstimation: null, cronometroInterval: null, cronometroStartTime: null, estado: 'pendiente' },
-    ];
+async function initializeFilter(navLinks, filteredItems, searchInput, usuario) {
+    console.log('Inicializando filtro');
+    let items = [];
 
     const estados = {
-        pendiente: { color: 'bg-secondary', text: 'Pendiente' },
-        'en proceso': { color: 'bg-warning', text: 'En Proceso' },
-        pausada: { color: 'bg-info', text: 'Pausada' },
-        finalizado: { color: 'bg-success', text: 'Finalizado' },
+        'Pendiente': { color: 'bg-secondary', text: 'Pendiente' },
+        'En Proceso': { color: 'bg-warning', text: 'En Proceso' },
+        'Pausada': { color: 'bg-info', text: 'Pausada' },
+        'Finalizado': { color: 'bg-success', text: 'Finalizado' },
+        'default': { color: 'bg-danger', text: 'Desconocido' }
     };
 
+    async function itemss() {
+        try {
+            const actividades = await getActividad();
+            items = Array.isArray(actividades) ? actividades : [actividades];
+            items = items.map(actividad => {
+                console.log('Estado de actividad:', actividad.estado);
+                return {
+                    id: actividad.id,
+                    name: actividad.nombre,
+                    date: actividad.fechaInicio,
+                    description: actividad.descripcion,
+                    creationDate: actividad.fechaInicio,
+                    project: actividad.proyecto.nombre,
+                    lider: actividad.proyecto.techLead.nombre,
+                    encargado: actividad.usuario ? actividad.usuario.nombre : null,
+                    timeEstimation: null,
+                    cronometroInterval: null,
+                    cronometroStartTime: null,
+                    estado: actividad.estado ? actividad.estado.nombre : 'Pendiente',
+                    horasUsadas: actividad.horasUsadas
+                };
+            });
+            console.log("Items cargados:", items);
+            return items;
+        } catch (error) {
+            console.error("Error al cargar las actividades:", error);
+            return [];
+        }
+    }
+
+    items = await itemss();
+
+    if (items.length === 0) {
+        console.log("No se cargaron actividades. Usando datos de ejemplo.");
+        items = [
+            { id: 1, name: 'Actividad A', date: '2023-05-15', description: 'Descripción de la Actividad A', creationDate: '2023-01-10', project: 'Proyecto 1', lider: 'Lider 1', encargado: null, timeEstimation: null, cronometroInterval: null, cronometroStartTime: null, estado: 'Pendiente', horasUsadas: 0 },
+        ];
+    }
+
     function startCronometro(item) {
+        console.log('Iniciando cronómetro para la actividad:', item.id);
         item.cronometroStartTime = Date.now();
         item.cronometroInterval = setInterval(() => {
             const elapsedTime = Date.now() - item.cronometroStartTime;
@@ -245,6 +299,7 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
     }
 
     function stopCronometro(item) {
+        console.log('Deteniendo cronómetro para la actividad:', item.id);
         clearInterval(item.cronometroInterval);
         item.cronometroStartTime = null;
     }
@@ -255,11 +310,9 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
     }
 
     async function filterItems(filter, searchTerm = '') {
+        console.log(`Aplicando filtro: ${filter}, término de búsqueda: ${searchTerm}`);
         let filteredContent = '';
         let itemsToShow = [...items];
-/**FOR EACH PARA  */
-        
-       
 
         if (filter === 'description') {
             itemsToShow.sort((a, b) => a.description.localeCompare(b.description));
@@ -283,8 +336,8 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
             const highlightedDescription = highlightText(item.description, searchTerm);
 
             let asignarButton = '';
-            if (item.estado === 'pendiente' && item.encargado === null && item.lider !== usuario.nombre) {
-                asignarButton = `<button class="btn btn-primary" data-id="${item.id}">Asignarme esta actividad</button>`;
+            if (item.estado === 'Pendiente' && item.encargado === null ) {
+                asignarButton = `<button class="btn btn-primary btn-sm my-2" data-id="${item.id}">Asignarme esta actividad</button>`;
             }
 
             let finalizarButton = '';
@@ -293,16 +346,18 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
             }
 
             let pausarButton = '';
-            if (item.encargado === usuario.nombre && item.estado === 'en proceso') {
+            if (item.encargado === usuario.nombre && item.estado === 'En Proceso') {
                 pausarButton = `<button class="btn btn-secondary pausar-actividad" data-id="${item.id}">Pausar actividad</button>`;
             }
 
             let reanudarButton = '';
-            if (item.encargado === usuario.nombre && item.estado === 'pausada') {
+            if (item.encargado === usuario.nombre && item.estado === 'Pausada') {
                 reanudarButton = `<button class="btn btn-success reanudar-actividad" data-id="${item.id}">Reanudar actividad</button>`;
             }
 
             const encargadoText = item.encargado ? `Encargado: ${item.encargado}` : 'No hay desarrollador asignado';
+
+            const estadoInfo = estados[item.estado] || estados['default'];
 
             filteredContent += `
                 <div class="col-12 mb-3">
@@ -310,14 +365,18 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
                         <div class="card-body">
                             <h5 class="card-title">${highlightedName}</h5>
                             <p class="card-text">${highlightedDescription}</p>
-                            <p class="card-text"><small class="text-muted">Fecha de creación: ${item.creationDate}</small></p>
+                            <p class="card-text"><small class="text-muted">Fecha de inicio: ${item.date}</small></p>
                             <p class="card-text"><small class="text-muted">Lider del proyecto: ${item.lider}</small></p>
                             <p class="card-text"><small class="text-muted">Proyecto: ${item.project}</small></p>
                             <p class="card-text"><small class="text-muted">${encargadoText}</small></p>
+                            <p class="card-text"><small class="text-muted">Horas usadas: ${item.horasUsadas}</small></p>
                         </div>
                         <div class="card-footer">
-                            <span class="badge ${estados[item.estado].color}">${estados[item.estado].text}</span>
+                            <span class="badge ${estadoInfo.color}">${estadoInfo.text}</span>
                             ${asignarButton}
+                            ${finalizarButton}
+                            ${pausarButton}
+                            ${reanudarButton}
                         </div>
                     </div>
                 </div>
@@ -345,16 +404,19 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
                 const assignModal = new bootstrap.Modal(document.getElementById('assignModal'));
                 assignModal.show();
                 document.getElementById('confirmAssignButton').onclick = () => {
-                    selectedItem.estado = 'pendiente';
+                    selectedItem.estado = 'Pendiente';
                     selectedItem.encargado = usuario.nombre;
+                    addUpdate(selectedItem.id, 'assign', 'Actividad asignada');
                     filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
                     assignModal.hide();
+                    sendUpdatesToServer();
                 };
             });
         });
     }
 
     function showActivityModal(item) {
+        console.log('Mostrando modal para la actividad:', item);
         const modalTitle = document.getElementById('modalActivityName');
         const modalDescription = document.getElementById('modalActivityDescription');
         const modalDate = document.getElementById('modalActivityDate');
@@ -362,47 +424,56 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
 
         modalTitle.textContent = item.name;
         modalDescription.textContent = item.description;
-        modalDate.textContent = `Fecha : ${item.date}`;
+        modalDate.textContent = `Fecha de inicio: ${item.date}`;
 
         modalFooter.innerHTML = '';
 
         if (item.encargado === usuario.nombre) {
-            if (item.estado === 'pendiente') {
+            if (item.estado === 'Pendiente') {
                 const startButton = document.createElement('button');
                 startButton.textContent = 'Empezar actividad';
                 startButton.className = 'btn btn-success';
                 startButton.addEventListener('click', () => {
-                    item.estado = 'en proceso';
+                    console.log('Iniciando actividad:', item.id);
+                    item.estado = 'En Proceso';
                     startCronometro(item);
+                    addUpdate(item.id, 'start', 'Actividad iniciada');
                     filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
                     showNotification('Actividad iniciada', 'success');
+                    sendUpdatesToServer();
                 });
                 modalFooter.appendChild(startButton);
-            } else if (item.estado === 'en proceso') {
+            } else if (item.estado === 'En Proceso') {
                 const pauseButton = document.createElement('button');
                 pauseButton.textContent = 'Pausar actividad';
                 pauseButton.className = 'btn btn-secondary';
                 pauseButton.addEventListener('click', () => {
+                    console.log('Pausando actividad:', item.id);
                     const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
                     confirmModal.show();
                     document.getElementById('confirmStopButton').onclick = () => {
                         stopCronometro(item);
-                        item.estado = 'pausada';
+                        item.estado = 'Pausada';
+                        addUpdate(item.id, 'pause', 'Actividad pausada');
                         filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
                         confirmModal.hide();
                         showNotification('Actividad pausada', 'info');
+                        sendUpdatesToServer();
                     };
                 });
                 modalFooter.appendChild(pauseButton);
-            } else if (item.estado === 'pausada') {
+            } else if (item.estado === 'Pausada') {
                 const reanudarButton = document.createElement('button');
                 reanudarButton.textContent = 'Reanudar actividad';
                 reanudarButton.className = 'btn btn-success';
                 reanudarButton.addEventListener('click', () => {
+                    console.log('Reanudando actividad:', item.id);
                     startCronometro(item);
-                    item.estado = 'en proceso';
+                    item.estado = 'En Proceso';
+                    addUpdate(item.id, 'resume', 'Actividad reanudada');
                     filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
                     showNotification('Actividad reanudada', 'success');
+                    sendUpdatesToServer();
                 });
                 modalFooter.appendChild(reanudarButton);
             }
@@ -411,13 +482,16 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
             finalizarButton.textContent = 'Finalizar actividad';
             finalizarButton.className = 'btn btn-danger';
             finalizarButton.addEventListener('click', () => {
+                console.log('Finalizando actividad:', item.id);
                 const finishActivityModal = new bootstrap.Modal(document.getElementById('finishActivityModal'));
                 finishActivityModal.show();
                 document.getElementById('confirmFinishButton').onclick = () => {
-                    item.estado = 'finalizado';
+                    item.estado = 'Finalizado';
+                    addUpdate(item.id, 'finish', 'Actividad finalizada');
                     filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
                     finishActivityModal.hide();
                     showNotification('Actividad finalizada', 'success');
+                    sendUpdatesToServer();
                 };
             });
             modalFooter.appendChild(finalizarButton);
@@ -427,6 +501,7 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
                 timeEstimationButton.textContent = 'Estimar tiempo';
                 timeEstimationButton.className = 'btn btn-primary';
                 timeEstimationButton.addEventListener('click', () => {
+                    console.log('Estimando tiempo para la actividad:', item.id);
                     const timeEstimationModal = new bootstrap.Modal(document.getElementById('timeEstimationModal'));
                     timeEstimationModal.show();
                     document.getElementById('confirmTimeEstimationButton').onclick = () => {
@@ -434,7 +509,9 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
                         if (timeEstimation > 0) {
                             item.timeEstimation = timeEstimation * 60 * 1000; // Convertir minutos a milisegundos
                             startCronometro(item);
+                            addUpdate(item.id, 'estimate', `Tiempo estimado: ${timeEstimation} minutos`);
                             timeEstimationModal.hide();
+                            sendUpdatesToServer();
                         } else {
                             showNotification('Por favor, ingrese un tiempo estimado válido', 'danger');
                         }
@@ -450,6 +527,7 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
     }
 
     function showNotification(message, type) {
+        console.log(`Mostrando notificación: ${message}, tipo: ${type}`);
         const toast = new bootstrap.Toast(document.getElementById('notificationToast'));
         const toastBody = document.getElementById('notificationMessage');
         toastBody.textContent = message;
@@ -460,7 +538,7 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
     navLinks.forEach(link => {
         link.addEventListener('click', function (event) {
             event.preventDefault();
-
+            console.log('Cambiando filtro:', this.getAttribute('data-filter'));
             navLinks.forEach(link => link.classList.remove('active'));
             this.classList.add('active');
 
@@ -471,14 +549,21 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
     });
 
     searchInput.addEventListener('input', () => {
+        console.log('Búsqueda actualizada:', searchInput.value.trim());
         const activeFilter = document.querySelector('.nav-link.active').getAttribute('data-filter');
         const searchTerm = searchInput.value.trim();
         filterItems(activeFilter, searchTerm);
     });
 
+    console.log('Aplicando filtro inicial: all');
     filterItems('all');
 }
 
 initializeFilterSystem();
 
-
+// Esta función debe ser implementada para obtener las actividades del servidor
+async function getActividad() {
+    // Implementación de la función para obtener actividades
+    // Por ahora, retornamos un array vacío
+    return [];
+}
