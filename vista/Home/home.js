@@ -2,7 +2,7 @@
 let rol="";
 
 let usuario = {
-    "nombre" : "Carlos Jhoan Aguilar",
+    "nombre" : "Camilo Hernandez",
     "rol" : `${localStorage.getItem("rol")}`,
     "foto" : "perfil.jpeg"
 }
@@ -70,18 +70,3 @@ function mostrarHome() {
 
 }
 
-// function irAProyectos() {
-
-//     location.href = "/vista/Proyectos/proyectos.html"
-// }
-
-
-// function irAUsuarios() {
-
-//     location.href = "/vista/Team/team.html"
-// }
-
-// function irAEstadisticas() {
-
-//     location.href = "/vista/Estadisticas/estadisticas.html"
-// }
