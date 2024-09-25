@@ -1,19 +1,18 @@
-
-// export async function cargarbody() {
-
-//     fetch('http://satisfied-rejoicing-production.up.railway.app/api/actividad')
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error(`Error al obtener datos: ${response.status} ${response.statusText}`);
-//             }
-//             return response.json();
-//         })
-//         .then(data => {
-//             console.log(data);
-//         })
-//         .catch(error => {
-//             console.error('Error:', error.message);
-//             throw error;
-//         });
-
-// }
+async function getActividad() {
+    const getCategoriesUrl = 'https://satisfied-rejoicing-production.up.railway.app/api/actividad';
+    
+    const response = await fetch(getCategoriesUrl, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+  
+    if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Network response was not ok: ${response.statusText} - ${text}`);
+    }
+  
+    return response.json();
+  }
+  
