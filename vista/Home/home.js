@@ -20,6 +20,7 @@ document.getElementById("bot-estadisticas").setAttribute("onclick", "irAEstadist
 
 function mostrarHome() {
 
+
     localStorage.setItem("rol", "Desarrollador");
 
     // Cargar la foto del usuario

@@ -1,8 +1,7 @@
 const usernameInput = document.getElementById('username-input');
 const passwordInput = document.getElementById('password-input');
-const enterInput = document.getElementById('enter-button');
-const registerInput = document.getElementById('register-button');
-enterInput.setAttribute("onclick", "authenticateUser()");
+const botonIngresar = document.getElementById('enter-button');
+botonIngresar.setAttribute("onclick", "authenticaUsuario()");
 registerInput.setAttribute("onclick", "registerUser()");
 let username;
 let password;
