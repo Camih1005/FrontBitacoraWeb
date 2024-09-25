@@ -7,9 +7,59 @@
     <link rel="stylesheet" href="/vista/Componentes/css/menu.css">
     <link rel="stylesheet" href="proyectos.css">
     <title>Proyectos</title>
+
+    <style>
+        #contenedor-proyecto {
+            height: auto;
+            width: 85%;
+            margin-top: 70px;
+            z-index: 2;
+            
+        }
+
+        .display-vertical-start {
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            align-items: center;
+        }
+
+        @media only screen and (max-width: 500px)  {
+
+            #icono-crear {
+                width: 45px;
+            }
+
+            #bot-crear {
+                position: fixed;
+                right: 10px;
+                bottom: 125px;
+                width: 70px;
+                height: 70px;
+                box-shadow: -7px -12px 25px -3px rgb(178, 178, 178, 0.5);
+            }
+
+            #bot-crear p {
+
+                display: none;
+
+
+            }
+
+        }
+
+    </style>
     
 </head>
-<body>
+<body class="display-vertical-start ">
+
+    <div id="contenedor-proyecto" class="display-vertical-center gap-5 alineado-vertical">
+        
+        <div id="bot-crear" class="display-vertical-around tarjeta-item">
+            <img src="/recursos/Images/add_2.png" alt="" id="icono-crear">
+            <p class="texto-fuente-playwrite letra-bold">Nuevo Proyecto</p>
+        </div>
+    </div>
     
     <script src="/vista/Componentes/js/head.js"></script>
     <script src="/vista/Componentes/js/nav.js"></script>

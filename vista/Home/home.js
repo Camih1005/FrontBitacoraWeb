@@ -2,9 +2,9 @@
 let rol="";
 
 let usuario = {
-    "nombre" : "Camilo Hernandez",
+    "nombre" : `${localStorage.getItem("nombre")}`,
     "rol" : `${localStorage.getItem("rol")}`,
-    "foto" : "perfil.jpeg"
+    "foto" : `${localStorage.getItem("foto")}`
 }
 
 
@@ -19,9 +19,6 @@ document.getElementById("bot-actividades").setAttribute("onclick", "irAActividad
 document.getElementById("bot-estadisticas").setAttribute("onclick", "irAEstadisticas()");
 
 function mostrarHome() {
-
-
-    localStorage.setItem("rol", "Desarrollador");
 
     // Cargar la foto del usuario
     let imgPerfilUsuario = document.getElementById("foto-perfil");
