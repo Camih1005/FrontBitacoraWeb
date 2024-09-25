@@ -1,10 +1,9 @@
 let usuario = {
-    "nombre" : "Carlos Jhoan Aguilar",
-    "rol" : "Project Manager",
-    "foto" : ""
+    "nombre" : `${localStorage.getItem("nombre")}`,
+    "rol" : `${localStorage.getItem("rol")}`,
+    "foto" : `${localStorage.getItem("foto")}`
 }
 
-usuario.rol = localStorage.getItem("rol");
 
 let jsonRoles;
 let hashRol= {};
