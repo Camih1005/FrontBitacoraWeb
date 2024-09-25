@@ -1,19 +1,39 @@
+async function getActividad() {
+    const getCategoriesUrl = 'https://satisfied-rejoicing-production.up.railway.app/api/actividad';
+    
+    const response = await fetch(getCategoriesUrl, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+  
+    if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Network response was not ok: ${response.statusText} - ${text}`);
+    }
+  
+    return response.json();
+  }
+  
 
-// export async function cargarbody() {
+  async function sendUpdatesToServer() {
+    try {
+        const response = await fetch('/api/developer-updates', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(developerUpdates)
+        });
 
-//     fetch('http://satisfied-rejoicing-production.up.railway.app/api/actividad')
-//         .then(response => {
-//             if (!response.ok) {
-//                 throw new Error(`Error al obtener datos: ${response.status} ${response.statusText}`);
-//             }
-//             return response.json();
-//         })
-//         .then(data => {
-//             console.log(data);
-//         })
-//         .catch(error => {
-//             console.error('Error:', error.message);
-//             throw error;
-//         });
-
-// }
+        if (response.ok) {
+            console.log('Actualizaciones enviadas con éxito');
+            developerUpdates.activities = [];
+        } else {
+            console.error('Error al enviar actualizaciones');
+        }
+    } catch (error) {
+        console.error('Error al enviar actualizaciones:', error);
+    }
+}
