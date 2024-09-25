@@ -6,6 +6,13 @@
     width: 80%;
     margin: 0 auto;
     
+    
+}
+.sticky-top {
+    
+    position: sticky;
+    
+    z-index: 102;
 }
 
 .s-principal{
