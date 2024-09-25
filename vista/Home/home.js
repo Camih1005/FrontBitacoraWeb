@@ -2,7 +2,7 @@
 let rol="";
 
 let usuario = {
-    "nombre" : "Carlos Jhoan Aguilar",
+    "nombre" : "Camilo Hernandez",
     "rol" : `${localStorage.getItem("rol")}`,
     "foto" : "perfil.jpeg"
 }
@@ -20,7 +20,7 @@ document.getElementById("bot-estadisticas").setAttribute("onclick", "irAEstadist
 
 function mostrarHome() {
 
-    localStorage.setItem("rol", "project manager");
+    localStorage.setItem("rol", "Desarrollador");
 
     // Cargar la foto del usuario
     let imgPerfilUsuario = document.getElementById("foto-perfil");
