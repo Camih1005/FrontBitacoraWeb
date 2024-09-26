@@ -8,58 +8,72 @@
     <link rel="stylesheet" href="proyectos.css">
     <title>Proyectos</title>
 
-    <style>
-        #contenedor-proyecto {
-            height: auto;
-            width: 85%;
-            margin-top: 70px;
-            z-index: 2;
-            
-        }
-
-        .display-vertical-start {
-            display: flex;
-            flex-direction: column;
-            justify-content: start;
-            align-items: center;
-        }
-
-        @media only screen and (max-width: 500px)  {
-
-            #icono-crear {
-                width: 45px;
-            }
-
-            #bot-crear {
-                position: fixed;
-                right: 10px;
-                bottom: 125px;
-                width: 70px;
-                height: 70px;
-                box-shadow: -7px -12px 25px -3px rgb(178, 178, 178, 0.5);
-            }
-
-            #bot-crear p {
-
-                display: none;
-
-
-            }
-
-        }
-
-    </style>
     
 </head>
 <body class="display-vertical-start ">
 
-    <div id="contenedor-proyecto" class="display-vertical-center gap-5 alineado-vertical">
+    <!--Botón para crear proyectos-->
+    <div id="bot-crear-proyecto" class="display-vertical-around tarjeta-item ">
+        <img src="/recursos/Images/add_2.png" alt="" id="icono-crear">
+        <p class="texto-fuente-playwrite letra-bold">Nuevo Proyecto</p>
+    </div>
+
+    <div id="contenedor-todos-proyectos" class="contenedor-info">AQUI VAN A ESTAR TODOS LOS PROYECTOS</div>
+
+    <div id="contenedor-nuevo-proyecto" class="display-vertical-center gap-5 alineado-vertical">
         
-        <div id="bot-crear" class="display-vertical-around tarjeta-item">
-            <img src="/recursos/Images/add_2.png" alt="" id="icono-crear">
-            <p class="texto-fuente-playwrite letra-bold">Nuevo Proyecto</p>
+        <div id="div-titulo-proyecto" class="display-vertical-between info-proyecto">
+            <label for="titulo-proyecto" class="texto-fuente-playwrite letra-bold">Nombre del proyecto</label>
+            <input type="text" id="titulo-proyecto" class ="p-2 border-gradiente">
+        </div>
+
+        <div id="div-descripcion-proyecto" class="display-vertical-between info-proyecto">
+            <label for="descripcion-proyecto" class="texto-fuente-playwrite letra-bold">Descripción del proyecto</label>
+            <textarea name="descripcion-proyecto" id="descripcion-proyecto" class="texto-fuente-playwrite border-gradiente" rows="5"  placeholder="Escribe detalladamente la información del proyecto"></textarea>
+        </div>
+
+
+        <div id="div-lider-proyecto" class="display-vertical-between info-proyecto">
+            <div id="div-bot-agregar-lider" class="display-horizontal-around p-2 gap-3">
+                <p class="alinear-p-vertical texto-fuente-playwrite letra-bold">Tech Leader</p>
+                <button id="bot-asignar-lider" class = "texto-fuente-playwrite letra-bold boton-asignar">Asignar</button>
+            </div>
+            
+            <div id="info-lider">
+                <img id="" src="" alt="" class="img-integrante">
+                <div class="p-2">
+                    <p class="texto-fuente-playwrite"></p>
+                    <p class="texto-fuente-playwrite"></p>
+                    <p class="texto-fuente-playwrite"></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="div-devs-proyecto" class="display-vertical-center info-proyecto">
+            <div id="div-bot-agregar-dev" class="display-horizontal-around alineado-vertical p-2 gap-3">
+                <p class="alinear-p-vertical texto-fuente-playwrite letra-bold">Desarrolladores</p>
+                <button  class="texto-fuente-playwrite letra-bold boton-asignar">Añadir</button>
+            </div>
+
+            <div id="grupo-desarrolladores"></div>
+        </div>
+
+        <div class="bots-cancelar-registrar display-horizontal-between gap-3">
+            <button id="bot-cancelar" class="boton-cancelar boton-final" ><img src="/recursos/Images/delete.png" alt="" class="icono-registro"></button>
+            <button id="bot-confirmar" class="boton-confirmar boton-final"><img src="/recursos/Images/check.png" alt="" class="icono-registro"></button>
+        </div>
+
+    </div>
+
+    <div id="contenedor-devs-lideres" class="contenedor-info display-vertical-center">
+        <div id="div-todos-integrantes" class="display-horizontal-around gap-3"></div>
+        <div id="bots-asignar-lider" class="bots-cancelar-registrar display-horizontal-between gap-3">
+            <button id="bot-no-asignar-lider" class="boton-cancelar boton-final"><img src="/recursos/Images/delete.png" alt="" class="icono-registro"></button>
+            <button id="bot-si-asignar-lider" class="boton-confirmar boton-final"><img src="/recursos/Images/check.png" alt="" class="icono-registro"></button>
         </div>
     </div>
+
+
     
     <script src="/vista/Componentes/js/head.js"></script>
     <script src="/vista/Componentes/js/nav.js"></script>

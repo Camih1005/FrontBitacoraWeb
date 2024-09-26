@@ -69,10 +69,7 @@ input:active {
 }
 
 .border-gradiente {
-    /* border-image: linear-gradient(to right, #3acfd5 0%, #3a4ed5 100%) 1;
-    border-radius: 7px;
-    border-width: 3px;
-    border-style: solid; */
+    
     background: 
     linear-gradient(#f6f6f6 0 0) padding-box, /*this is your grey background*/
     linear-gradient(to right, #3783ca 0%, #311a7f 100%) border-box;
