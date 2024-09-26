@@ -49,10 +49,7 @@ function mostrarHome() {
             
         }
 
-    }
-
-        
-    );
+    });
         
 
     // Cargar el nombre del usuario
