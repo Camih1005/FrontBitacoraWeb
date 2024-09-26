@@ -177,6 +177,13 @@ footer {
     gap: 2px;
 }
 
+.display-horizontal-center {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    gap: 2px;
+}
+
 .display-horizontal-between {
     display: flex;
     justify-content:space-between;

@@ -18,13 +18,15 @@
         <p class="texto-fuente-playwrite letra-bold">Nuevo Proyecto</p>
     </div>
 
-    <div id="contenedor-todos-proyectos" class="contenedor-info">AQUI VAN A ESTAR TODOS LOS PROYECTOS</div>
+    <div id="contenedor-todos-proyectos" class="contenedor-info"></div>
+
+    <!--Formulario del proyecto-->
 
     <div id="contenedor-nuevo-proyecto" class="display-vertical-center gap-5 alineado-vertical">
         
         <div id="div-titulo-proyecto" class="display-vertical-between info-proyecto">
             <label for="titulo-proyecto" class="texto-fuente-playwrite letra-bold">Nombre del proyecto</label>
-            <input type="text" id="titulo-proyecto" class ="p-2 border-gradiente">
+            <input type="text" id="titulo-proyecto" class ="p-2 border-gradiente texto-fuente-playwrite">
         </div>
 
         <div id="div-descripcion-proyecto" class="display-vertical-between info-proyecto">
@@ -32,39 +34,60 @@
             <textarea name="descripcion-proyecto" id="descripcion-proyecto" class="texto-fuente-playwrite border-gradiente" rows="5"  placeholder="Escribe detalladamente la información del proyecto"></textarea>
         </div>
 
+        <!--Asignar Lider-->
 
         <div id="div-lider-proyecto" class="display-vertical-between info-proyecto">
             <div id="div-bot-agregar-lider" class="display-horizontal-around p-2 gap-3">
                 <p class="alinear-p-vertical texto-fuente-playwrite letra-bold">Tech Leader</p>
                 <button id="bot-asignar-lider" class = "texto-fuente-playwrite letra-bold boton-asignar">Asignar</button>
             </div>
+
+            <!--info del lider-->
             
-            <div id="info-lider">
-                <img id="" src="" alt="" class="img-integrante">
+            <div id="info-lider" class = "display-horizontal-between gap-3 border-gradiente">
+                <img id="foto-leader-seleccionado" src="" alt="" class="img-integrante">
                 <div class="p-2">
-                    <p class="texto-fuente-playwrite"></p>
-                    <p class="texto-fuente-playwrite"></p>
-                    <p class="texto-fuente-playwrite"></p>
+                    <p id="nombre-leader-seleccionado" class="texto-fuente-playwrite"></p>
+                    <p id="cedula-leader-seleccionado" class="texto-fuente-playwrite"></p>
+                    <p id="correo-leader-seleccionado" class="texto-fuente-playwrite"></p>
                 </div>
             </div>
         </div>
 
+        <!--Grupo de los desarrolladores-->
+
         <div id="div-devs-proyecto" class="display-vertical-center info-proyecto">
             <div id="div-bot-agregar-dev" class="display-horizontal-around alineado-vertical p-2 gap-3">
                 <p class="alinear-p-vertical texto-fuente-playwrite letra-bold">Desarrolladores</p>
-                <button  class="texto-fuente-playwrite letra-bold boton-asignar">Añadir</button>
+                <button id="agregar-devs"  class="texto-fuente-playwrite letra-bold boton-asignar">Agregar</button>
             </div>
 
-            <div id="grupo-desarrolladores"></div>
+            <div id="grupo-desarrolladores" class="display-horizontal-around gap-3"> </div>
         </div>
+
+        
+
+        <div id="div-tareas-proyecto" class="">
+            <div id="div-boton-agregar-actividad" class="display-horizontal-center p-2 gap-3">
+                <p class="alinear-p-vertical texto-fuente-playwrite letra-bold">Actividades</p>
+                <button id="bot-agregar-actividad" class = "texto-fuente-playwrite letra-bold boton-asignar">Agregar</button>
+            </div>
+
+            <!--Aquí se ponen las actividades-->
+            <div id="div-todas-tareas" class="display-vertical-around gap-4"></div>
+
+        </div>
+
 
         <div class="bots-cancelar-registrar display-horizontal-between gap-3">
             <button id="bot-cancelar" class="boton-cancelar boton-final" ><img src="/recursos/Images/delete.png" alt="" class="icono-registro"></button>
             <button id="bot-confirmar" class="boton-confirmar boton-final"><img src="/recursos/Images/check.png" alt="" class="icono-registro"></button>
         </div>
+        
 
     </div>
 
+    <!--Contenedor con todos los devs y líderes-->
     <div id="contenedor-devs-lideres" class="contenedor-info display-vertical-center">
         <div id="div-todos-integrantes" class="display-horizontal-around gap-3"></div>
         <div id="bots-asignar-lider" class="bots-cancelar-registrar display-horizontal-between gap-3">

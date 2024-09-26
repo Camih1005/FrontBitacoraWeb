@@ -160,6 +160,8 @@ select {
     background-color: rgb(145, 246, 145);
 }
 
+
+
 /*Media Query para el responsive en tamaño celular*/
 
 @media only screen and (max-width: 500px)  {
