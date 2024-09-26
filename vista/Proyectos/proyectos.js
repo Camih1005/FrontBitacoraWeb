@@ -494,7 +494,7 @@ function confirmarCreacionProyecto () {
                             console.log(jsonInfoDevsSeleccionados[20][1]);
 
                             listaTodosDevs.forEach(id => {
-                                console.log(jsonInfoDevsSeleccionados[id][1]);
+                                
                                 let bodyDevProyecto = {
                                 "idProyecto": `${idProyecto}`,
                                 "CedulaUsuario": `'${jsonInfoDevsSeleccionados[id][1]}'`
