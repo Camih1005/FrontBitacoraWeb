@@ -5,7 +5,7 @@ let usuario = {
     "foto" : `${localStorage.getItem("foto")}`
 }
 
-
+console.log(usuario);
 
 document.body.setAttribute("onload", "cargar()");
 
@@ -61,7 +61,7 @@ function cargar() {
     })
     .then(response => response.json())
     .then(data => {
-        
+        console.log("aquí")
         data.forEach(element => {
             
             if (element.rol.nombre == "Tech Leader") {
@@ -69,7 +69,7 @@ function cargar() {
             } else if (element.rol.nombre == "Desarrollador") {
                 listaTodosDevs.push(element);
             }
-        });
+        })
 
     })
 }
@@ -494,7 +494,7 @@ function confirmarCreacionProyecto () {
 
                             console.log(jsonInfoDevsSeleccionados[20][1]);
 
-                            listaTodosDevs.forEach(id => {
+                            listDevsSeleccionados.forEach(id => {
                                 
                                 let bodyDevProyecto = {
                                 "idProyecto": `${idProyecto}`,
