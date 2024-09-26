@@ -6,9 +6,6 @@ let usuario = {
     "foto": ""
 };
 
-// Guardamos el ID del usuario en el localStorage para persistencia
-localStorage.setItem('usuarioId', usuario.id);
-
 let developerUpdates = [];
 let items = []; // Moved to global scope
 let searchInput; // Declare searchInput in global scope
@@ -26,18 +23,18 @@ let objetos = [];
 console.log("validando objetos ", objetos);
 
 function prepareActivityData(activity) {
-    const data = {
+    let d = activity.project ? activity.project.id : 2
+    console.log(d)
+    return {
         nombre: activity.name,
         descripcion: activity.description,
         horasUsadas: activity.horasUsadas.toString(),
         fechaInicio: activity.date,
         fechaFin: activity.fechaFin || activity.date,
         idUser: activity.encargado ? activity.encargado.id : "",
-        idProyecto: activity.project && activity.project.id ? activity.project.id : 1,
+        idProyecto: 2,
         idEstado: getEstadoId(activity.estado)
     };
-    console.log("Datos preparados para enviar:", data);
-    return data;
 }
 
 function getEstadoId(estadoNombre) {
@@ -70,13 +67,9 @@ async function sendUpdatesToServer(activityId) {
         });
         if (response.ok) {
             console.log('Actualizaciones enviadas con éxito');
-            const responseData = await response.json();
-            console.log('Respuesta del servidor:', responseData);
             filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
         } else {
             console.error('Error al enviar actualizaciones');
-            const errorText = await response.text();
-            console.error('Respuesta del servidor:', errorText);
         }
     } catch (error) {
         console.error('Error al enviar actualizaciones:', error);
@@ -89,36 +82,36 @@ function initializeFilterSystem() {
 
     document.body.insertAdjacentHTML('beforeend', `
         <div class="filtroContainer my-5">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Actividades</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#" data-filter="all">Todos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-filter="description">Por Descripción</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-filter="creationDate">Por Fecha de Creación</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-filter="project">Por Proyecto</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#" data-filter="myActivities">Ver Mis Actividades</a>
-                        </li>
-                    </ul>
-                    <form class="d-flex">
-                        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" id="searchInput">
-                    </form>
-                </div>
-            </div>
-        </nav>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-topw">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Actividades</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" data-filter="all">Todos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-filter="description">Por Descripción</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-filter="creationDate">Por Fecha de Creación</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-filter="project">Por Proyecto</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-filter="myActivities">Ver Mis Actividades</a>
+                </li>
+            </ul>
+            <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar" id="searchInput">
+            </form>
+        </div>
+    </div>
+</nav>
 
         <div class="container mt-4">
             <div id="filtered-items" class="row">
@@ -140,7 +133,9 @@ function initializeFilterSystem() {
                         <p><small class="text-muted" id="modalActivityDate"></small></p>
                     </div>
                     <div class="modal-footer">
-                        <!-- Los botones se agregarán dinámicamente aquí -->
+                        <button type="button" class="btn btn-success" id="startActivityButton">Empezar actividad</button>
+                        <button type="button" class="btn btn-warning" id="pauseActivityButton" style="display: none;">Pausar actividad</button>
+                        <button type="button" class="btn btn-danger" id="finishActivityButton" style="display: none;">Finalizar actividad</button>
                     </div>
                 </div>
             </div>
@@ -227,7 +222,6 @@ function initializeFilterSystem() {
             <div class="toast-body" id="notificationMessage"></div>
         </div>
     `);
-
     const style = document.createElement('style');
     style.textContent = `
         .nav-link.active {
@@ -252,12 +246,56 @@ function initializeFilterSystem() {
             width: auto;
             height: 50px;
         }
-        .my-activity {
-            background-color: #e6f7ff !important;
+        
+        /* New styles for improved hamburger menu */
+        .page-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            position: relative;
+            z-index: 1000;
+        }
+        .navbar-collapse {
+            transition: max-height 0.3s ease-out;
+        }
+        .content-container {
+            transition: transform 0.3s ease-out;
+        }
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background-color: #f8f9fa;
+                box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+                max-height: 0;
+                overflow: hidden;
+            }
+            .navbar-collapse.show {
+                max-height: none;
+            }
+            .content-container.pushed {
+                transform: translateY(var(--menu-height, 0px));
+            }
+            .navbar-nav {
+                padding: 1rem 0;
+            }
+            .navbar-nav .nav-item {
+                padding: 0.5rem 0;
+            }
+            .navbar-nav .nav-link {
+                padding-left: 1rem;
+                transition: background-color 0.2s ease;
+            }
+            .navbar-nav .nav-link:hover {
+                background-color: rgba(0,0,0,0.05);
+            }
         }
     `;
     document.head.appendChild(style);
-
     const checkElementsAndInitialize = setInterval(() => {
         const navLinks = document.querySelectorAll('.nav-link');
         const filteredItems = document.getElementById('filtered-items');
@@ -266,12 +304,12 @@ function initializeFilterSystem() {
         if (navLinks.length && filteredItems && searchInput) {
             clearInterval(checkElementsAndInitialize);
             console.log('Elementos encontrados, inicializando filtro');
-            initializeFilter(navLinks, filteredItems, searchInput);
+            initializeFilter(navLinks, filteredItems, searchInput, usuario);
         }
     }, 100);
 }
 
-async function initializeFilter(navLinks, filteredItems, searchInput) {
+async function initializeFilter(navLinks, filteredItems, searchInput, usuario) {
     console.log('Inicializando filtro');
 
     const estados = {
@@ -298,9 +336,9 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
                     date: actividad.fechaInicio || 'Fecha no disponible',
                     description: actividad.descripcion || 'Sin descripción',
                     creationDate: actividad.fechaInicio || 'Fecha no disponible',
-                    project: actividad.project || { nombre: 'Sin proyecto', id: 1 },
+                    project: actividad.project || { nombre: 'Sin proyecto' },
                     lider: actividad.project && actividad.project.techLead ? actividad.project.techLead.nombre : 'Sin líder',
-                    encargado: actividad.usuario || null,
+                    encargado: actividad.usuario ? actividad.usuario : null,
                     timeEstimation: null,
                     cronometroInterval: null,
                     cronometroStartTime: null,
@@ -322,7 +360,7 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
     if (items.length === 0) {
         console.log("No se cargaron actividades. Usando datos de ejemplo.");
         items = [
-            { id: 1, name: 'EJEMPLO', date: '2023-05-15', description: 'Descripción de la Actividad A', creationDate: '2023-01-10', project: { nombre: 'Proyecto 1', id: 1 }, lider: 'Lider 1', encargado: null, timeEstimation: null, cronometroInterval: null, cronometroStartTime: null, estado: 'Pendiente', horasUsadas: 0 },
+            { id: 1, name: 'EJEMPLO', date: '2023-05-15', description: 'Descripción de la Actividad A', creationDate: '2023-01-10', project: { nombre: 'Proyecto 1' }, lider: 'Lider 1', encargado: null, timeEstimation: null, cronometroInterval: null, cronometroStartTime: null, estado: 'Pendiente', horasUsadas: 0 },
         ];
     }
     
@@ -364,7 +402,7 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
         } else if (filter === 'project') {
             itemsToShow.sort((a, b) => a.project.nombre.localeCompare(b.project.nombre));
         } else if (filter === 'myActivities') {
-            itemsToShow = itemsToShow.filter(item => item.encargado && item.encargado.id === localStorage.getItem('usuarioId'));
+            itemsToShow = itemsToShow.filter(item => item.encargado && item.encargado.id === usuario.id);
         }
 
         if (searchTerm) {
@@ -374,20 +412,38 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
             );
         }
 
-        const usuarioId = localStorage.getItem('usuarioId');
-
         itemsToShow.forEach(item => {
             const highlightedName = highlightText(item.name, searchTerm);
             const highlightedDescription = highlightText(item.description, searchTerm);
 
+            let asignarButton = '';
+            if (item.estado === 'Pendiente' && (!item.encargado || item.encargado.id !== usuario.id)) {
+                asignarButton = `<button class="btn btn-primary btn-sm my-2 asignar-actividad" data-id="${item.id}">Asignarme esta actividad</button>`;
+            }
+
+            let finalizarButton = '';
+            if (item.encargado && item.encargado.id === usuario.id && item.estado !== 'Finalizado') {
+                finalizarButton = `<button class="btn btn-danger finalizar-actividad" data-id="${item.id}">Finalizar actividad</button>`;
+            }
+
+            let pausarButton = '';
+            if (item.encargado && item.encargado.id === usuario.id && item.estado === 'En Progreso') {
+                pausarButton = `<button class="btn btn-secondary pausar-actividad" data-id="${item.id}">Pausar actividad</button>`;
+            }
+
+            let reanudarButton = '';
+            if (item.encargado && item.encargado.id === usuario.id && item.estado === 'Pendiente') {
+                reanudarButton = `<button class="btn btn-success reanudar-actividad" data-id="${item.id}">Reanudar actividad</button>`;
+            }
+
             const encargadoText = item.encargado ? `Encargado: ${item.encargado.nombre}` : 'No hay desarrollador asignado';
+            console.log(estados)
 
             const estadoInfo = estados[item.estado] || estados['default'];
-            const isMyActivity = item.encargado && item.encargado.id === usuarioId;
 
             filteredContent += `
                 <div class="col-12 mb-3">
-                    <div class="card ${isMyActivity ? 'my-activity' : ''}" data-id="${item.id}">
+                    <div class="card" data-id="${item.id}">
                         <div class="card-body">
                             <h5 class="card-title">${highlightedName}</h5>
                             <p class="card-text">${highlightedDescription}</p>
@@ -399,6 +455,10 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
                         </div>
                         <div class="card-footer">
                             <span class="badge ${estadoInfo.color}">${estadoInfo.text}</span>
+                            ${asignarButton}
+                            ${finalizarButton}
+                            ${pausarButton}
+                            ${reanudarButton}
                         </div>
                     </div>
                 </div>
@@ -417,6 +477,25 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
                 showActivityModal(selectedItem);
             });
         });
+
+        const asignarButtons = filteredItems.querySelectorAll('.asignar-actividad');
+        asignarButtons.forEach(button => {
+            button.addEventListener('click', (event) => {
+                event.stopPropagation();
+                const itemId = parseInt(button.getAttribute('data-id'), 10);
+                const selectedItem = items.find(item => item.id === itemId);
+                const assignModal = new bootstrap.Modal(document.getElementById('assignModal'));
+                assignModal.show();
+                document.getElementById('confirmAssignButton').onclick = () => {
+                    selectedItem.estado = 'Pendiente';
+                    selectedItem.encargado = { id: usuario.id, nombre: usuario.nombre };
+                    addUpdate(selectedItem.id, 'assign', 'Actividad asignada');
+                    sendUpdatesToServer(selectedItem.id);
+                    filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
+                    assignModal.hide();
+                };
+            });
+        });
     }
 
     function showActivityModal(item) {
@@ -432,8 +511,7 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
 
         modalFooter.innerHTML = '';
 
-        const usuarioId = localStorage.getItem('usuarioId');
-        if (item.encargado && item.encargado.id === usuarioId) {
+        if (item.encargado && item.encargado.id === usuario.id) {
             if (item.estado === 'Pendiente') {
                 const startButton = document.createElement('button');
                 startButton.textContent = 'Empezar actividad';
@@ -448,9 +526,7 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
                     showNotification('Actividad iniciada', 'success');
                 });
                 modalFooter.appendChild(startButton);
-            }
-
-            if (item.estado === 'En Progreso') {
+            } else if (item.estado === 'En Progreso') {
                 const pauseButton = document.createElement('button');
                 pauseButton.textContent = 'Pausar actividad';
                 pauseButton.className = 'btn btn-secondary';
@@ -471,63 +547,49 @@ async function initializeFilter(navLinks, filteredItems, searchInput) {
                 modalFooter.appendChild(pauseButton);
             }
 
-            const finalizarButton = document.createElement('button');
-            finalizarButton.textContent = 'Finalizar actividad';
-            finalizarButton.className = 'btn btn-danger';
-            finalizarButton.addEventListener('click', () => {
-                console.log('Finalizando actividad:', item.id);
-                const finishActivityModal = new bootstrap.Modal(document.getElementById('finishActivityModal'));
-                finishActivityModal.show();
-                document.getElementById('confirmFinishButton').onclick = () => {
-                    item.estado = 'Finalizado';
-                    addUpdate(item.id, 'finish', 'Actividad finalizada');
-                    sendUpdatesToServer(item.id);
-                    filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
-                    finishActivityModal.hide();
-                    showNotification('Actividad finalizada', 'success');
-                };
-            });
-            modalFooter.appendChild(finalizarButton);
-
-            const timeEstimationButton = document.createElement('button');
-            timeEstimationButton.textContent = 'Estimar tiempo';
-            timeEstimationButton.className = 'btn btn-primary';
-            timeEstimationButton.addEventListener('click', () => {
-                console.log('Estimando tiempo para la actividad:', item.id);
-                const timeEstimationModal = new bootstrap.Modal(document.getElementById('timeEstimationModal'));
-                timeEstimationModal.show();
-                document.getElementById('confirmTimeEstimationButton').onclick = () => {
-                    const timeEstimation = parseInt(document.getElementById('timeEstimationInput').value, 10);
-                    if (timeEstimation > 0) {
-                        item.timeEstimation = timeEstimation * 60 * 1000; // Convertir minutos a milisegundos
-                        startCronometro(item);
-                        addUpdate(item.id, 'estimate', `Tiempo estimado: ${timeEstimation} minutos`);
+            if (item.estado !== 'Finalizado' && item.estado !== 'En Revisión') {
+                const finalizarButton = document.createElement('button');
+                finalizarButton.textContent = 'Finalizar actividad';
+                finalizarButton.className = 'btn btn-danger';
+                finalizarButton.addEventListener('click', () => {
+                    console.log('Finalizando actividad:', item.id);
+                    const finishActivityModal = new bootstrap.Modal(document.getElementById('finishActivityModal'));
+                    finishActivityModal.show();
+                    document.getElementById('confirmFinishButton').onclick = () => {
+                        item.estado = 'Finalizado';
+                        addUpdate(item.id, 'finish', 'Actividad finalizada');
                         sendUpdatesToServer(item.id);
-                        timeEstimationModal.hide();
-                    } else {
-                        showNotification('Por favor, ingrese un tiempo estimado válido', 'danger');
-                    }
-                };
-            });
-            modalFooter.appendChild(timeEstimationButton);
-        } else if (!item.encargado) {
-            const assignButton = document.createElement('button');
-            assignButton.textContent = 'Asignarme esta actividad';
-            assignButton.className = 'btn btn-primary';
-            assignButton.addEventListener('click', () => {
-                const assignModal = new bootstrap.Modal(document.getElementById('assignModal'));
-                assignModal.show();
-                document.getElementById('confirmAssignButton').onclick = () => {
-                    item.encargado = { id: usuarioId, nombre: usuario.nombre };
-                    item.estado = 'Pendiente';
-                    addUpdate(item.id, 'assign', 'Actividad asignada');
-                    sendUpdatesToServer(item.id);
-                    filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
-                    assignModal.hide();
-                    showNotification('Actividad asignada', 'success');
-                };
-            });
-            modalFooter.appendChild(assignButton);
+                        filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
+                        finishActivityModal.hide();
+                        showNotification('Actividad finalizada', 'success');
+                    };
+                });
+                modalFooter.appendChild(finalizarButton);
+            }
+
+            if (item.cronometroInterval === null) {
+                const timeEstimationButton = document.createElement('button');
+                timeEstimationButton.textContent = 'Estimar tiempo';
+                timeEstimationButton.className = 'btn btn-primary';
+                timeEstimationButton.addEventListener('click', () => {
+                    console.log('Estimando tiempo para la actividad:', item.id);
+                    const timeEstimationModal = new bootstrap.Modal(document.getElementById('timeEstimationModal'));
+                    timeEstimationModal.show();
+                    document.getElementById('confirmTimeEstimationButton').onclick = () => {
+                        const timeEstimation = parseInt(document.getElementById('timeEstimationInput').value, 10);
+                        if (timeEstimation > 0) {
+                            item.timeEstimation = timeEstimation * 60 * 1000; // Convertir minutos a milisegundos
+                            startCronometro(item);
+                            addUpdate(item.id, 'estimate', `Tiempo estimado: ${timeEstimation} minutos`);
+                            sendUpdatesToServer(item.id);
+                            timeEstimationModal.hide();
+                        } else {
+                            showNotification('Por favor, ingrese un tiempo estimado válido', 'danger');
+                        }
+                    };
+                });
+                modalFooter.appendChild(timeEstimationButton);
+            }
         }
 
         // Mostrar el modal

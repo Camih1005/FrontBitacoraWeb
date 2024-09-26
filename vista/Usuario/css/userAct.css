@@ -9,11 +9,11 @@
     margin-bottom: 200px;
     
 }
-.sticky-top {
+.sticky-topw {
     
-    position: sticky;
+    position: fixed;
     
-    z-index: 102;
+    z-index: 1002;
 }
 
 .s-principal{
