@@ -82,7 +82,7 @@ textarea {
 
 #contenedor-todos-proyectos {
     width: 80%;
-    background-color: gray;
+    background-color: rgb(255, 255, 255);
 }
 
 .contenedor-info {
@@ -94,9 +94,10 @@ textarea {
 
 #contenedor-devs-lideres {
     padding: 5px;
-    width: 60%;
+    width: 80%;
     display: none;
     z-index: 3;
+    padding-bottom: 50px;
     
 }
 
@@ -109,7 +110,7 @@ textarea {
     height: 200px;
     background-color: #f6f6f6;
     border-radius: 30px;
-    padding: 5px;
+    padding: 10px;
     transition: all 0.3s;
     
 
@@ -121,7 +122,8 @@ textarea {
 
 .tarjeta-dev:hover {
     cursor: pointer;
-    background-color: rgb(173, 249, 173);
+    scale: 1.1;
+    /* background-color: rgb(173, 249, 173); */
 }
 
 .tarjeta-dev:active {
@@ -196,7 +198,50 @@ textarea {
     width: 25px;
 }
 
+#info-lider {
+    display: none;   
+}
 
+.carta-dev {
+    width: 400px;
+    height: 200px;
+    padding: 10px;
+}
+
+#grupo-desarrolladores {
+    flex-wrap: wrap;
+}
+
+.quitar-dev {
+    transition: all 0.3s;
+}
+
+
+.quitar-dev:hover {
+
+    box-shadow: 0px 0px 20px 10px rgba(180, 179, 179, 0.4);
+}
+
+.nueva-tarea {
+    width: 80%;
+}
+
+.nombre-descr {
+    width: 100%;
+}
+
+#div-tareas-proyecto{
+    width: 100%;
+
+}
+
+.nombre-actividad {
+    width: 60%;
+    padding: 4px;
+}
+#div-todas-tareas {
+    margin-top: 10px;
+}
 
 
 /*Media Query para el responsive en tamaño celular*/
@@ -246,6 +291,13 @@ textarea {
 
     .tarjeta-dev  p{
         font-size: 0.9rem;
+    }
+
+    #contenedor-devs-lideres {
+        padding-bottom: 120px;
+    }
+    .tarjeta-dev {
+        width: 350px;
     }
 
 }
