@@ -488,7 +488,8 @@ function confirmarCreacionProyecto () {
                     .then(data => {
 
                         let idProyecto = data.id;
-
+                        console.log(data);
+                        
                         if (listaTodosDevs.length > 0) {
 
                             console.log(jsonInfoDevsSeleccionados[20][1]);
