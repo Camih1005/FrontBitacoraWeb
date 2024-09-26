@@ -1,50 +1,86 @@
+// Asumimos que esta información del usuario se obtiene de algún sistema de autenticación
 let usuario = {
-    "id": "1",
+    "id": "5",
     "nombre": "Carlos Jhoan Aguilar",
     "rol": "Desarrollador",
     "foto": ""
 };
 
-let developerUpdates = {
-    userId: usuario.id,
-    activities: []
-};
+// Guardamos el ID del usuario en el localStorage para persistencia
+localStorage.setItem('usuarioId', usuario.id);
+
+let developerUpdates = [];
+let items = []; // Moved to global scope
+let searchInput; // Declare searchInput in global scope
 
 function addUpdate(activityId, updateType, details) {
-    developerUpdates.activities.push({
+    developerUpdates.push({
         activityId: activityId,
         updateType: updateType,
         timestamp: new Date().toISOString(),
         details: details
     });
-    console.log('Actualización añadida:', developerUpdates);
 }
 
-async function sendUpdatesToServer() {
-    console.log('Intentando enviar actualizaciones al servidor:', developerUpdates);
-    // Comentamos el código de envío real por ahora
-    /*
+let objetos = [];
+console.log("validando objetos ", objetos);
+
+function prepareActivityData(activity) {
+    const data = {
+        nombre: activity.name,
+        descripcion: activity.description,
+        horasUsadas: activity.horasUsadas.toString(),
+        fechaInicio: activity.date,
+        fechaFin: activity.fechaFin || activity.date,
+        idUser: activity.encargado ? activity.encargado.id : "",
+        idProyecto: activity.project && activity.project.id ? activity.project.id : 1,
+        idEstado: getEstadoId(activity.estado)
+    };
+    console.log("Datos preparados para enviar:", data);
+    return data;
+}
+
+function getEstadoId(estadoNombre) {
+    const estadoMap = {
+        'En Progreso': 1,
+        'Finalizado': 2,
+        'En Revisión': 3,
+        'Pendiente': 4
+    };
+    return estadoMap[estadoNombre] || 4; // Por defecto, devolvemos 'Pendiente' (4)
+}
+
+async function sendUpdatesToServer(activityId) {
+    const activity = items.find(item => item.id === activityId);
+    if (!activity) {
+        console.error('No se encontró la actividad para enviar actualizaciones.');
+        return;
+    }
+
+    const updatedData = prepareActivityData(activity);
+    console.log('Intentando enviar actualizaciones al servidor:', updatedData);
+
     try {
-        const response = await fetch('/api/developer-updates', {
+        const response = await fetch(`https://satisfied-rejoicing-production.up.railway.app/api/actividad/actualizarActividad/${activityId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(developerUpdates)
+            body: JSON.stringify(updatedData)
         });
-
         if (response.ok) {
             console.log('Actualizaciones enviadas con éxito');
-            developerUpdates.activities = [];
+            const responseData = await response.json();
+            console.log('Respuesta del servidor:', responseData);
+            filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
         } else {
             console.error('Error al enviar actualizaciones');
+            const errorText = await response.text();
+            console.error('Respuesta del servidor:', errorText);
         }
     } catch (error) {
         console.error('Error al enviar actualizaciones:', error);
     }
-    */
-    console.log('Simulando envío exitoso. Limpiando actividades.');
-    developerUpdates.activities = [];
 }
 
 function initializeFilterSystem() {
@@ -104,9 +140,7 @@ function initializeFilterSystem() {
                         <p><small class="text-muted" id="modalActivityDate"></small></p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-success" id="startActivityButton">Empezar actividad</button>
-                        <button type="button" class="btn btn-warning" id="pauseActivityButton" style="display: none;">Pausar actividad</button>
-                        <button type="button" class="btn btn-danger" id="finishActivityButton" style="display: none;">Finalizar actividad</button>
+                        <!-- Los botones se agregarán dinámicamente aquí -->
                     </div>
                 </div>
             </div>
@@ -214,58 +248,64 @@ function initializeFilterSystem() {
             background-color: yellow;
             font-weight: bold;
         }
-            .card-footer a{
-            width : auto;
-            height : 50px;
-            }
+        .card-footer a {
+            width: auto;
+            height: 50px;
+        }
+        .my-activity {
+            background-color: #e6f7ff !important;
+        }
     `;
     document.head.appendChild(style);
 
     const checkElementsAndInitialize = setInterval(() => {
         const navLinks = document.querySelectorAll('.nav-link');
         const filteredItems = document.getElementById('filtered-items');
-        const searchInput = document.getElementById('searchInput');
+        searchInput = document.getElementById('searchInput');
 
         if (navLinks.length && filteredItems && searchInput) {
             clearInterval(checkElementsAndInitialize);
             console.log('Elementos encontrados, inicializando filtro');
-            initializeFilter(navLinks, filteredItems, searchInput, usuario);
+            initializeFilter(navLinks, filteredItems, searchInput);
         }
     }, 100);
 }
 
-async function initializeFilter(navLinks, filteredItems, searchInput, usuario) {
+async function initializeFilter(navLinks, filteredItems, searchInput) {
     console.log('Inicializando filtro');
-    let items = [];
 
     const estados = {
         'Pendiente': { color: 'bg-secondary', text: 'Pendiente' },
-        'En Proceso': { color: 'bg-warning', text: 'En Proceso' },
-        'Pausada': { color: 'bg-info', text: 'Pausada' },
+        'En Progreso': { color: 'bg-warning', text: 'En Progreso' },
         'Finalizado': { color: 'bg-success', text: 'Finalizado' },
+        'En Revisión': { color: 'bg-info', text: 'En Revisión' },
         'default': { color: 'bg-danger', text: 'Desconocido' }
     };
 
+    let actividades;
+  
     async function itemss() {
         try {
-            const actividades = await getActividad();
+            actividades = await getActividad();
+            console.log(actividades);
             items = Array.isArray(actividades) ? actividades : [actividades];
             items = items.map(actividad => {
                 console.log('Estado de actividad:', actividad.estado);
+                console.log('Proyecto:', actividad.project ? actividad.project.nombre : 'Sin proyecto');
                 return {
-                    id: actividad.id,
-                    name: actividad.nombre,
-                    date: actividad.fechaInicio,
-                    description: actividad.descripcion,
-                    creationDate: actividad.fechaInicio,
-                    project: actividad.proyecto.nombre,
-                    lider: actividad.proyecto.techLead.nombre,
-                    encargado: actividad.usuario ? actividad.usuario.nombre : null,
+                    id: actividad.id || 0,
+                    name: actividad.nombre || 'Sin nombre',
+                    date: actividad.fechaInicio || 'Fecha no disponible',
+                    description: actividad.descripcion || 'Sin descripción',
+                    creationDate: actividad.fechaInicio || 'Fecha no disponible',
+                    project: actividad.project || { nombre: 'Sin proyecto', id: 1 },
+                    lider: actividad.project && actividad.project.techLead ? actividad.project.techLead.nombre : 'Sin líder',
+                    encargado: actividad.usuario || null,
                     timeEstimation: null,
                     cronometroInterval: null,
                     cronometroStartTime: null,
-                    estado: actividad.estado ? actividad.estado.nombre : 'Pendiente',
-                    horasUsadas: actividad.horasUsadas
+                    estado: actividad.estado && actividad.estado.nombre ? actividad.estado.nombre : 'Pendiente',
+                    horasUsadas: actividad.horasUsadas || 0
                 };
             });
             console.log("Items cargados:", items);
@@ -275,16 +315,19 @@ async function initializeFilter(navLinks, filteredItems, searchInput, usuario) {
             return [];
         }
     }
-
+    
     items = await itemss();
-
+    console.log('Número de items:', items.length);
+    
     if (items.length === 0) {
         console.log("No se cargaron actividades. Usando datos de ejemplo.");
         items = [
-            { id: 1, name: 'Actividad A', date: '2023-05-15', description: 'Descripción de la Actividad A', creationDate: '2023-01-10', project: 'Proyecto 1', lider: 'Lider 1', encargado: null, timeEstimation: null, cronometroInterval: null, cronometroStartTime: null, estado: 'Pendiente', horasUsadas: 0 },
+            { id: 1, name: 'EJEMPLO', date: '2023-05-15', description: 'Descripción de la Actividad A', creationDate: '2023-01-10', project: { nombre: 'Proyecto 1', id: 1 }, lider: 'Lider 1', encargado: null, timeEstimation: null, cronometroInterval: null, cronometroStartTime: null, estado: 'Pendiente', horasUsadas: 0 },
         ];
     }
-
+    
+    console.log(items);
+   
     function startCronometro(item) {
         console.log('Iniciando cronómetro para la actividad:', item.id);
         item.cronometroStartTime = Date.now();
@@ -319,9 +362,9 @@ async function initializeFilter(navLinks, filteredItems, searchInput, usuario) {
         } else if (filter === 'creationDate') {
             itemsToShow.sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate));
         } else if (filter === 'project') {
-            itemsToShow.sort((a, b) => a.project.localeCompare(b.project));
+            itemsToShow.sort((a, b) => a.project.nombre.localeCompare(b.project.nombre));
         } else if (filter === 'myActivities') {
-            itemsToShow = itemsToShow.filter(item => item.encargado === usuario.nombre);
+            itemsToShow = itemsToShow.filter(item => item.encargado && item.encargado.id === localStorage.getItem('usuarioId'));
         }
 
         if (searchTerm) {
@@ -331,52 +374,31 @@ async function initializeFilter(navLinks, filteredItems, searchInput, usuario) {
             );
         }
 
+        const usuarioId = localStorage.getItem('usuarioId');
+
         itemsToShow.forEach(item => {
             const highlightedName = highlightText(item.name, searchTerm);
             const highlightedDescription = highlightText(item.description, searchTerm);
 
-            let asignarButton = '';
-            if (item.estado === 'Pendiente' && item.encargado === null ) {
-                asignarButton = `<button class="btn btn-primary btn-sm my-2" data-id="${item.id}">Asignarme esta actividad</button>`;
-            }
-
-            let finalizarButton = '';
-            if (item.encargado === usuario.nombre) {
-                finalizarButton = `<button class="btn btn-danger finalizar-actividad" data-id="${item.id}">Finalizar actividad</button>`;
-            }
-
-            let pausarButton = '';
-            if (item.encargado === usuario.nombre && item.estado === 'En Proceso') {
-                pausarButton = `<button class="btn btn-secondary pausar-actividad" data-id="${item.id}">Pausar actividad</button>`;
-            }
-
-            let reanudarButton = '';
-            if (item.encargado === usuario.nombre && item.estado === 'Pausada') {
-                reanudarButton = `<button class="btn btn-success reanudar-actividad" data-id="${item.id}">Reanudar actividad</button>`;
-            }
-
-            const encargadoText = item.encargado ? `Encargado: ${item.encargado}` : 'No hay desarrollador asignado';
+            const encargadoText = item.encargado ? `Encargado: ${item.encargado.nombre}` : 'No hay desarrollador asignado';
 
             const estadoInfo = estados[item.estado] || estados['default'];
+            const isMyActivity = item.encargado && item.encargado.id === usuarioId;
 
             filteredContent += `
                 <div class="col-12 mb-3">
-                    <div class="card" data-id="${item.id}">
+                    <div class="card ${isMyActivity ? 'my-activity' : ''}" data-id="${item.id}">
                         <div class="card-body">
                             <h5 class="card-title">${highlightedName}</h5>
                             <p class="card-text">${highlightedDescription}</p>
                             <p class="card-text"><small class="text-muted">Fecha de inicio: ${item.date}</small></p>
                             <p class="card-text"><small class="text-muted">Lider del proyecto: ${item.lider}</small></p>
-                            <p class="card-text"><small class="text-muted">Proyecto: ${item.project}</small></p>
+                            <p class="card-text"><small class="text-muted">Proyecto: ${item.project.nombre}</small></p>
                             <p class="card-text"><small class="text-muted">${encargadoText}</small></p>
                             <p class="card-text"><small class="text-muted">Horas usadas: ${item.horasUsadas}</small></p>
                         </div>
                         <div class="card-footer">
                             <span class="badge ${estadoInfo.color}">${estadoInfo.text}</span>
-                            ${asignarButton}
-                            ${finalizarButton}
-                            ${pausarButton}
-                            ${reanudarButton}
                         </div>
                     </div>
                 </div>
@@ -395,24 +417,6 @@ async function initializeFilter(navLinks, filteredItems, searchInput, usuario) {
                 showActivityModal(selectedItem);
             });
         });
-
-        const asignarButtons = filteredItems.querySelectorAll('.btn-primary');
-        asignarButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const itemId = parseInt(button.getAttribute('data-id'), 10);
-                const selectedItem = items.find(item => item.id === itemId);
-                const assignModal = new bootstrap.Modal(document.getElementById('assignModal'));
-                assignModal.show();
-                document.getElementById('confirmAssignButton').onclick = () => {
-                    selectedItem.estado = 'Pendiente';
-                    selectedItem.encargado = usuario.nombre;
-                    addUpdate(selectedItem.id, 'assign', 'Actividad asignada');
-                    filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
-                    assignModal.hide();
-                    sendUpdatesToServer();
-                };
-            });
-        });
     }
 
     function showActivityModal(item) {
@@ -428,22 +432,25 @@ async function initializeFilter(navLinks, filteredItems, searchInput, usuario) {
 
         modalFooter.innerHTML = '';
 
-        if (item.encargado === usuario.nombre) {
+        const usuarioId = localStorage.getItem('usuarioId');
+        if (item.encargado && item.encargado.id === usuarioId) {
             if (item.estado === 'Pendiente') {
                 const startButton = document.createElement('button');
                 startButton.textContent = 'Empezar actividad';
                 startButton.className = 'btn btn-success';
                 startButton.addEventListener('click', () => {
                     console.log('Iniciando actividad:', item.id);
-                    item.estado = 'En Proceso';
+                    item.estado = 'En Progreso';
                     startCronometro(item);
                     addUpdate(item.id, 'start', 'Actividad iniciada');
+                    sendUpdatesToServer(item.id);
                     filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
                     showNotification('Actividad iniciada', 'success');
-                    sendUpdatesToServer();
                 });
                 modalFooter.appendChild(startButton);
-            } else if (item.estado === 'En Proceso') {
+            }
+
+            if (item.estado === 'En Progreso') {
                 const pauseButton = document.createElement('button');
                 pauseButton.textContent = 'Pausar actividad';
                 pauseButton.className = 'btn btn-secondary';
@@ -453,29 +460,15 @@ async function initializeFilter(navLinks, filteredItems, searchInput, usuario) {
                     confirmModal.show();
                     document.getElementById('confirmStopButton').onclick = () => {
                         stopCronometro(item);
-                        item.estado = 'Pausada';
+                        item.estado = 'Pendiente';
                         addUpdate(item.id, 'pause', 'Actividad pausada');
+                        sendUpdatesToServer(item.id);
                         filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
                         confirmModal.hide();
                         showNotification('Actividad pausada', 'info');
-                        sendUpdatesToServer();
                     };
                 });
                 modalFooter.appendChild(pauseButton);
-            } else if (item.estado === 'Pausada') {
-                const reanudarButton = document.createElement('button');
-                reanudarButton.textContent = 'Reanudar actividad';
-                reanudarButton.className = 'btn btn-success';
-                reanudarButton.addEventListener('click', () => {
-                    console.log('Reanudando actividad:', item.id);
-                    startCronometro(item);
-                    item.estado = 'En Proceso';
-                    addUpdate(item.id, 'resume', 'Actividad reanudada');
-                    filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
-                    showNotification('Actividad reanudada', 'success');
-                    sendUpdatesToServer();
-                });
-                modalFooter.appendChild(reanudarButton);
             }
 
             const finalizarButton = document.createElement('button');
@@ -488,37 +481,53 @@ async function initializeFilter(navLinks, filteredItems, searchInput, usuario) {
                 document.getElementById('confirmFinishButton').onclick = () => {
                     item.estado = 'Finalizado';
                     addUpdate(item.id, 'finish', 'Actividad finalizada');
+                    sendUpdatesToServer(item.id);
                     filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
                     finishActivityModal.hide();
                     showNotification('Actividad finalizada', 'success');
-                    sendUpdatesToServer();
                 };
             });
             modalFooter.appendChild(finalizarButton);
 
-            if (item.cronometroInterval === null) {
-                const timeEstimationButton = document.createElement('button');
-                timeEstimationButton.textContent = 'Estimar tiempo';
-                timeEstimationButton.className = 'btn btn-primary';
-                timeEstimationButton.addEventListener('click', () => {
-                    console.log('Estimando tiempo para la actividad:', item.id);
-                    const timeEstimationModal = new bootstrap.Modal(document.getElementById('timeEstimationModal'));
-                    timeEstimationModal.show();
-                    document.getElementById('confirmTimeEstimationButton').onclick = () => {
-                        const timeEstimation = parseInt(document.getElementById('timeEstimationInput').value, 10);
-                        if (timeEstimation > 0) {
-                            item.timeEstimation = timeEstimation * 60 * 1000; // Convertir minutos a milisegundos
-                            startCronometro(item);
-                            addUpdate(item.id, 'estimate', `Tiempo estimado: ${timeEstimation} minutos`);
-                            timeEstimationModal.hide();
-                            sendUpdatesToServer();
-                        } else {
-                            showNotification('Por favor, ingrese un tiempo estimado válido', 'danger');
-                        }
-                    };
-                });
-                modalFooter.appendChild(timeEstimationButton);
-            }
+            const timeEstimationButton = document.createElement('button');
+            timeEstimationButton.textContent = 'Estimar tiempo';
+            timeEstimationButton.className = 'btn btn-primary';
+            timeEstimationButton.addEventListener('click', () => {
+                console.log('Estimando tiempo para la actividad:', item.id);
+                const timeEstimationModal = new bootstrap.Modal(document.getElementById('timeEstimationModal'));
+                timeEstimationModal.show();
+                document.getElementById('confirmTimeEstimationButton').onclick = () => {
+                    const timeEstimation = parseInt(document.getElementById('timeEstimationInput').value, 10);
+                    if (timeEstimation > 0) {
+                        item.timeEstimation = timeEstimation * 60 * 1000; // Convertir minutos a milisegundos
+                        startCronometro(item);
+                        addUpdate(item.id, 'estimate', `Tiempo estimado: ${timeEstimation} minutos`);
+                        sendUpdatesToServer(item.id);
+                        timeEstimationModal.hide();
+                    } else {
+                        showNotification('Por favor, ingrese un tiempo estimado válido', 'danger');
+                    }
+                };
+            });
+            modalFooter.appendChild(timeEstimationButton);
+        } else if (!item.encargado) {
+            const assignButton = document.createElement('button');
+            assignButton.textContent = 'Asignarme esta actividad';
+            assignButton.className = 'btn btn-primary';
+            assignButton.addEventListener('click', () => {
+                const assignModal = new bootstrap.Modal(document.getElementById('assignModal'));
+                assignModal.show();
+                document.getElementById('confirmAssignButton').onclick = () => {
+                    item.encargado = { id: usuarioId, nombre: usuario.nombre };
+                    item.estado = 'Pendiente';
+                    addUpdate(item.id, 'assign', 'Actividad asignada');
+                    sendUpdatesToServer(item.id);
+                    filterItems(document.querySelector('.nav-link.active').getAttribute('data-filter'), searchInput.value.trim());
+                    assignModal.hide();
+                    showNotification('Actividad asignada', 'success');
+                };
+            });
+            modalFooter.appendChild(assignButton);
         }
 
         // Mostrar el modal
@@ -561,9 +570,20 @@ async function initializeFilter(navLinks, filteredItems, searchInput, usuario) {
 
 initializeFilterSystem();
 
-// Esta función debe ser implementada para obtener las actividades del servidor
 async function getActividad() {
-    // Implementación de la función para obtener actividades
-    // Por ahora, retornamos un array vacío
-    return [];
+    const getCategoriesUrl = 'https://satisfied-rejoicing-production.up.railway.app/api/actividad';
+    
+    const response = await fetch(getCategoriesUrl, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+  
+    if (!response.ok) {
+        const text = await response.text();
+        throw new Error(`Network response was not ok: ${response.statusText} - ${text}`);
+    }
+  
+    return response.json();
 }
