@@ -489,34 +489,35 @@ function confirmarCreacionProyecto () {
 
                         let idProyecto = data.id;
                         console.log(data);
+                        console.log(jsonInfoDevsSeleccionados);
                         
-                        if (listaTodosDevs.length > 0) {
+                        // if (listaTodosDevs.length > 0) {
 
-                            console.log(jsonInfoDevsSeleccionados[20][1]);
+                        //     console.log(jsonInfoDevsSeleccionados[20][1]);
 
-                            listDevsSeleccionados.forEach(id => {
+                        //     listDevsSeleccionados.forEach(id => {
                                 
-                                let bodyDevProyecto = {
-                                "idProyecto": `${idProyecto}`,
-                                "CedulaUsuario": `'${jsonInfoDevsSeleccionados[id][1]}'`
-                              }
+                        //         let bodyDevProyecto = {
+                        //         "idProyecto": `${idProyecto}`,
+                        //         "CedulaUsuario": `'${jsonInfoDevsSeleccionados[id][1]}'`
+                        //       }
 
-                              let apiDevProyecto = "https://satisfied-rejoicing-production.up.railway.app/api/proyecto/asignarProyectoAUsuario";
+                        //       let apiDevProyecto = "https://satisfied-rejoicing-production.up.railway.app/api/proyecto/asignarProyectoAUsuario";
 
-                              fetch(apiDevProyecto, {
-                                method : 'POST',
-                                body : JSON.stringify(bodyDevProyecto),
-                                headers: {
-                                    'Content-type' : 'application/json; charset=UTF-8',
-                                    'Access-Control-Allow-Origin': '*',
-                                }
-                              })
-                              .then(response => response.json())
-                              .then(data => console.log(data))
+                        //       fetch(apiDevProyecto, {
+                        //         method : 'POST',
+                        //         body : JSON.stringify(bodyDevProyecto),
+                        //         headers: {
+                        //             'Content-type' : 'application/json; charset=UTF-8',
+                        //             'Access-Control-Allow-Origin': '*',
+                        //         }
+                        //       })
+                        //       .then(response => response.json())
+                        //       .then(data => console.log(data))
 
-                            })
+                        //     })
 
-                        }
+                        // }
 
                     }) 
 
